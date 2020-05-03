@@ -5,8 +5,8 @@ export let menu: Menu[] = [
     typeMenu: 'Tabs',
     order: 1,
     title: 'Treinos',
-    url: 'Treinos',
-    icon: 'flaticon-home',
+    url: '/treinos',
+    icon: 'home',
     ativo: true
   }
 ]

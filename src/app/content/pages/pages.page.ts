@@ -49,8 +49,8 @@ export class PagesPage implements OnInit {
   }
 
   isActive(url: string): boolean {
+    console.log(this.currentRouteUrl)
     if (!url) { return; }
-
     if (this.currentRouteUrl === url) {
       return true;
     }
