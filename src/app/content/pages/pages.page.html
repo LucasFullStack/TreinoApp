@@ -1,11 +1,62 @@
 <ion-app>
+  <ion-menu contentId="menu-content" type="overlay" side="start">
+
+    <ion-header class="navbar-header" color="primary">
+
+      <p class="logo">
+        <img src="assets/demo/default/media/img/logo/logo_default_dark.png" />
+      </p>
+
+      <ion-avatar class="avatar">
+        <img [src]="usuarioDisplay.foto64 ? perfil.foto64: 'assets/demo/default/media/img/users/user4.jpg'">
+      </ion-avatar>
+
+      <div class="nome">
+        <h5 class="nome-rep">{{usuarioDisplay.display}}</h5>
+      </div>
+    </ion-header>
+
+    <ion-content>
+      <div class="nav-devider"></div>
+      <ion-list lines="none">
+        <ion-menu-toggle auto-hide="false" *ngFor="let p of appSidePages">
+          <ion-item (click)="openPage(p)">
+            <ion-label [ngClass]="{active: isActive(p.url)}">
+              <i *ngIf="p.icon"
+                class="m-menu__link-icon btn btn-info m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill head-icon {{p.icon}}"
+                ng-reflect-klass="m-menu__link-icon btn btn-info" ng-reflect-ng-class=p.icon
+                style="margin: 5px!important;"></i>
+              <div *ngIf="p.src"
+                class="m-menu__link-icon btn btn-info m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill head-icon"
+                style="margin: 5px!important;"><img src={{p.src}} style="width: 21px;"></div>
+              <label>{{p.title}} </label>
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+
+    </ion-content>
+
+    <ion-footer>
+      <ion-toolbar>
+        <div *ngIf="versionNumber" class="version">
+          Versão {{ versionNumber }}
+        </div>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-menu>
   <ion-tabs>
-    <ion-tab-bar  slot="bottom" [hidden]="hidden" >
-      <ion-tab-button [ngClass]="{active: isActive(p.url)}"  *ngFor="let p of appTabPages" (click)="openPage(p.url)">
+    <ion-tab-bar slot="bottom" [hidden]="hidden">
+      <ion-tab-button [ngClass]="{active: isActive(p.url)}" *ngFor="let p of appTabPages" (click)="openPage(p.url)">
         <ion-icon [name]="p.icon"></ion-icon>
-            <ion-label>{{p.title}}</ion-label>
+        <ion-label>{{p.title}}</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
-   <ion-router-outlet></ion-router-outlet>
+
+  <ion-split-pane when="xs" contentId="menu-content">
+
+    <ion-router-outlet id="menu-content" main></ion-router-outlet>
+
+  </ion-split-pane>
 </ion-app>
