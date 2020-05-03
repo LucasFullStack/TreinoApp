@@ -52,6 +52,7 @@ export class LoginPage implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.router.navigate(['/'])
       }, (error: HttpErrorResponse) => {
+        console.log(error)
         if(error.status > 0){
           this.presentErrorAlert('Atenção!', error.error)
         }else {
