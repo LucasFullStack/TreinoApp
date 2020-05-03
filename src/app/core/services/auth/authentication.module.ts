@@ -8,7 +8,7 @@ import {
 
 import { TokenStorageService } from './token-storage.service';
 import { AuthenticationService } from './authentication.service';
-//import { AuthGuard } from './auth.guard';
+import { AuthGuardService } from './auth-guard.service';
 
 export function factory(authenticationService: AuthenticationService) {
 	return authenticationService;
@@ -18,7 +18,7 @@ export function factory(authenticationService: AuthenticationService) {
 	imports: [AuthModule],
 	providers: [
     TokenStorageService,
-   // AuthGuard,
+    AuthGuardService,
 	AuthenticationService,
 	{ provide: PROTECTED_FALLBACK_PAGE_URI, useValue: '/' },
 		{ provide: PUBLIC_FALLBACK_PAGE_URI, useValue: '/auth' },

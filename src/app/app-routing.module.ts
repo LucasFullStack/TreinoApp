@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {
+ /* {
     path: '',
     redirectTo: 'auth',
     pathMatch: 'full'
-  },
+  },*/
   {
     path: '',
     loadChildren: () => import('./content/pages/pages.module').then( m => m.PagesPageModule)

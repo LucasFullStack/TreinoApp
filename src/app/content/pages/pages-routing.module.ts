@@ -1,18 +1,25 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { PagesPage } from './pages.page';
+import { AuthGuardService } from 'src/app/core/services/auth/auth-guard.service';
 
 const routes: Routes = [
   {
     path: '',
-    component: PagesPage
+    canActivate: [AuthGuardService],
+    component: PagesPage,
+    children: [
+      {
+        path: 'treinos',
+        loadChildren: () => import('./treinos/treinos.module').then( m => m.TreinosPageModule)
+      }
+		]
   },
-
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthPageModule)
-  }
+  },
+
 ];
 
 @NgModule({
