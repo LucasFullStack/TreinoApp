@@ -3,6 +3,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Login } from 'src/app/core/models/auth/login';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/auth/authentication.service';
+import { AlertService } from 'src/app/core/services/alert/alert.service';
+import { LoadingService } from 'src/app/core/services/loading/loading.service';
+import { finalize } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 let _postLogin$: Subscription = new Subscription();
 
@@ -13,15 +18,19 @@ let _postLogin$: Subscription = new Subscription();
 })
 export class LoginPage implements OnInit, OnDestroy {
   form: FormGroup;
+  errorMessage: string = 'Não foi possível efetuar o login. Caso o problema persista entre em contato com o administrador!';
 
   constructor(private fb: FormBuilder,
-              private authService: AuthenticationService) { }
+    private authService: AuthenticationService,
+    private alertService: AlertService,
+    private loadingService: LoadingService,
+    private router: Router) { }
 
   ngOnInit() {
     this.createForm();
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     _postLogin$.unsubscribe();
   }
 
@@ -33,16 +42,26 @@ export class LoginPage implements OnInit, OnDestroy {
     })
   }
 
-  postLogin(login: Login){
-    _postLogin$ = this.authService.postLogin(login)
-                                  .subscribe((data)=>{
-                                    console.log(data)
-                                  },(error)=>{
-                                    console.log(error)
-                                  })
+  postLogin(login: Login) {
+    this.loadingService.presentLoading('Entrando...');
+    _postLogin$ = this.authService.postLogin(login).pipe(
+      finalize(() => {
+        this.loadingService.dismissLoading();
+      })
+    )
+      .subscribe((data) => {
+        this.router.navigate(['/'])
+      }, (error: HttpErrorResponse) => {
+        if(error.status > 0){
+          this.presentErrorAlert('Atenção!', error.error)
+        }else {
+          this.presentErrorAlert('Atenção!',this.errorMessage)
+        }
+        
+      })
   }
 
-  prepareForm(): Login{
+  prepareForm(): Login {
     const _login = new Login();
     const _controls = this.form.controls;
     _login.email = _controls['email'].value;
@@ -58,5 +77,14 @@ export class LoginPage implements OnInit, OnDestroy {
     const _login = this.prepareForm();
     this.postLogin(_login)
   }
-  
+
+
+  presentSuccessAlert(header: string, msg: string) {
+    this.alertService.presentSuccessAlertDefault(header, msg)
+  }
+
+  presentErrorAlert(header: string, msg: string) {
+    this.alertService.presentErrorAlertDefault(header, msg)
+  }
+
 }
