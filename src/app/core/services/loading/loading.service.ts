@@ -8,7 +8,7 @@ export class LoadingService {
   isLoading : boolean;
   constructor(private loadingController: LoadingController) { }
 
-  async presentLoading(message : string) {
+  async presentLoading(message?: string) {
 		this.isLoading = true;
 		return await this.loadingController.create({
 		  message: message,

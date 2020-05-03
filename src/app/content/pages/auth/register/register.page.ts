@@ -5,6 +5,8 @@ import { Register } from 'src/app/core/models/auth/register';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { LoadingService } from 'src/app/core/services/loading/loading.service';
+import { AlertService } from 'src/app/core/services/alert/alert.service';
 
 let _postRegister$: Subscription = new Subscription();
 
@@ -15,11 +17,12 @@ let _postRegister$: Subscription = new Subscription();
 })
 export class RegisterPage implements OnInit, OnDestroy {
   form: FormGroup;
-  loadingAfterSubmit: boolean = false;
   errorMessage: string = 'Não foi possível  criar a conta. Caso o problema persista entre em contato com o administrador!';
 
   constructor(private fb: FormBuilder,
-    private authService: AuthService) { }
+              private authService: AuthService,
+              private loadingService: LoadingService,
+              private alertService: AlertService) { }
 
   ngOnInit() {
     this.createForm();
@@ -30,11 +33,12 @@ export class RegisterPage implements OnInit, OnDestroy {
   }
 
   createForm() {
+    const _patternEmail: string =  "^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$";
     this.form = this.fb.group({
-      'firstName': ['', Validators.required],
-      'lastName': ['', Validators.required],
-      'email': ['', Validators.required],
-      'password': ['', Validators.required]
+      'firstName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+      'lastName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+      'email': ['',  Validators.compose([Validators.required, Validators.pattern(_patternEmail)])],
+      'password': ['',Validators.compose([Validators.required, Validators.minLength(4),Validators.maxLength(6)])],
     })
   }
 
@@ -44,20 +48,25 @@ export class RegisterPage implements OnInit, OnDestroy {
     }
 
     const _register = this.prepareForm();
-    console.log(_register);
+    this.postRegister(_register);
   }
 
   postRegister(register: Register) {
-    this.loadingAfterSubmit = true;
+    this.loadingService.presentLoading('Criando...');
     _postRegister$ = this.authService.postRegister(register).pipe(
       finalize(() => {
-        this.loadingAfterSubmit = false;
+        this.loadingService.dismissLoading();
       })
     )
       .subscribe(() => {
-
+        this.presentSuccessAlert('Parabéns, ' + register.firstName + "!",'Sua sua conta foi criada com sucesso!');
+        this.form.reset();
       }, (error: HttpErrorResponse) => {
-
+         if(error.status > 0){
+           this.presentErrorAlert('Atenção!', error.error.msg)
+         }else {
+           this.presentErrorAlert('Atenção!',this.errorMessage)
+         }
       })
   }
 
@@ -71,5 +80,12 @@ export class RegisterPage implements OnInit, OnDestroy {
     return _register;
   }
 
+  presentSuccessAlert(header: string, msg: string){
+    this.alertService.presentSuccessAlertDefault(header,msg)
+  }
+
+  presentErrorAlert(header: string, msg: string){
+    this.alertService.presentErrorAlertDefault(header,msg)
+  }
 
 }

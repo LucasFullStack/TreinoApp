@@ -8,7 +8,17 @@ export class AlertService {
 
   constructor(private alertController: AlertController) { }
 
-  async presentAlertDefault(header: string, message: string) {
+  async presentSuccessAlertDefault(header: string, message: string) {
+    const _alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: ['OK']
+    });
+    await _alert.present();
+  }
+
+  
+  async presentErrorAlertDefault(header: string, message: string) {
     const _alert = await this.alertController.create({
       header: header,
       message: message,
