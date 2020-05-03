@@ -2,7 +2,7 @@
   <ion-tabs>
     <ion-tab-bar  slot="bottom" [hidden]="hidden" >
       <ion-tab-button [ngClass]="{active: isActive(p.url)}"  *ngFor="let p of appPages" (click)="openPage(p.url)">
-  
+        <ion-icon name="Home"></ion-icon>
             <ion-label>{{p.title}}</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
