@@ -11,7 +11,7 @@ import { MenuService } from 'src/app/core/services/menu/menu.service';
   styleUrls: ['./pages.page.scss'],
 })
 export class PagesPage implements OnInit {
-  appPages: Menu[];
+  appTabPages: Menu[];
   currentRouteUrl: string = this.router.url.split(/[?#]/)[0];
 
   constructor(private router: Router,
@@ -22,7 +22,7 @@ export class PagesPage implements OnInit {
   ngOnInit() {
     this.checkRouteEvents();
     this.exitApp();
-    this.getMenu();
+    this.getMenuTabs();
   }
 
   checkRouteEvents() {
@@ -33,10 +33,10 @@ export class PagesPage implements OnInit {
       });
   }
 
-  getMenu(){
+  getMenuTabs(){
     this.menuService.getTabsMenu()
            .then((data)=>{
-             this.appPages = data;
+             this.appTabPages = data;
            });
    }
 
@@ -49,7 +49,6 @@ export class PagesPage implements OnInit {
   }
 
   isActive(url: string): boolean {
-    console.log(this.currentRouteUrl)
     if (!url) { return; }
     if (this.currentRouteUrl === url) {
       return true;

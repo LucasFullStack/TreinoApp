@@ -2,3 +2,99 @@
     color: var(--ion-color-secondary);
     outline:none!important;
 }
+
+ion-avatar {     
+    margin: auto;
+    width:100% !important;  
+    height : 100% !important;  
+    max-width: 80px !important;  //any size
+    max-height: 80px !important; //any size 
+}
+
+
+ion-header{
+    height: 270px !important;
+
+}
+
+.logo{
+    text-align: center;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+
+.avatar{
+    position: relative;
+    text-align: center;
+    width: 100%;
+    padding: 5px;
+    border: 2px solid rgba(120, 130, 140, 0.13);
+    border-radius: 100%;
+}
+
+.nome{
+    text-align: center; 
+    padding-top: 10px;
+    font-family: "Poppins", sans-serif;
+}
+
+
+.m-menu__link-text{
+    padding-bottom: -10px
+}
+
+.version{
+    font-size: 1rem;
+    font-weight: 300;
+    color: #a7abc3;
+    padding-left: 16px;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 20px;
+    position: fixed;
+}
+
+ion-label{
+    color: var(--ion-color-primary) !important;
+}
+
+.active{
+    color: var(--ion-color-secondary) !important;
+    outline:none!important;
+    background-color: #fffaef;
+}
+
+.nome-rep{
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #575962;
+}
+
+.setor{
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #9699a2;
+}
+ 
+.nome{
+    text-align: center;
+    margin-top: -10px;
+    padding-bottom: 15px;
+    color:#455a64;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+  }
+
+.border-header{
+    border-style: solid;
+    border-bottom-width: 1px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-left-width: 0;
+    color: #ebedf2;
+}
+
+
+
