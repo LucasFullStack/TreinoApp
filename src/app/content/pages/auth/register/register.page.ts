@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Register } from 'src/app/core/models/auth/register';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { LoadingService } from 'src/app/core/services/loading/loading.service';
 import { AlertService } from 'src/app/core/services/alert/alert.service';
+import { AuthenticationService } from 'src/app/core/services/auth/authentication.service';
 
 let _postRegister$: Subscription = new Subscription();
 
@@ -20,7 +20,7 @@ export class RegisterPage implements OnInit, OnDestroy {
   errorMessage: string = 'Não foi possível  criar a conta. Caso o problema persista entre em contato com o administrador!';
 
   constructor(private fb: FormBuilder,
-              private authService: AuthService,
+              private authenticationService: AuthenticationService,
               private loadingService: LoadingService,
               private alertService: AlertService) { }
 
@@ -53,7 +53,7 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   postRegister(register: Register) {
     this.loadingService.presentLoading('Criando...');
-    _postRegister$ = this.authService.postRegister(register).pipe(
+    _postRegister$ = this.authenticationService.postRegister(register).pipe(
       finalize(() => {
         this.loadingService.dismissLoading();
       })

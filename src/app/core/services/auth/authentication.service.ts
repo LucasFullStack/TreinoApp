@@ -7,11 +7,12 @@ import { Register } from './../../models/auth/register';
 import { TokenStorageService } from './token-storage.service';
 import { AccessData } from '../../models/auth/access-data';
 import { Login } from '../../models/auth/login';
+import { AuthService } from 'ngx-auth';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthenticationService implements AuthService {
   private API_URL: string = environment.API_URL = "api/auth";
 
   constructor(private http: HttpClient,
