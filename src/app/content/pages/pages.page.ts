@@ -7,6 +7,8 @@ import { MenuService } from 'src/app/core/services/menu/menu.service';
 import { UsuarioDisplay } from 'src/app/core/models/usuarios/usuario-display';
 import { Subscription } from 'rxjs';
 import { UsuariosService } from 'src/app/core/services/usuarios/usuarios.service';
+import { AppVersion } from '@ionic-native/app-version/ngx';
+import { AuthenticationService } from 'src/app/core/services/auth/authentication.service';
 
 let _checkRouteEvents$: Subscription = new Subscription();
 let _getUsuarioDisplay$: Subscription = new Subscription();
@@ -21,12 +23,15 @@ export class PagesPage implements OnInit, OnDestroy {
   appSidePages: Menu[];
   usuarioDisplay: UsuarioDisplay = new UsuarioDisplay();
   currentRouteUrl: string = this.router.url.split(/[?#]/)[0];
+  versionNumber: string;
 
   constructor(private router: Router,
     public navCtrl: NavController,
     private menuService: MenuService,
     private platform: Platform,
-    private usuariosService: UsuariosService) { }
+    private usuariosService: UsuariosService,
+    private appVersion: AppVersion,
+    private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.checkRouteEvents();
@@ -34,6 +39,7 @@ export class PagesPage implements OnInit, OnDestroy {
     this.getMenuTabs();
     this.getMenuSide()
     this.getUsuarioDisplay();
+    this.getVersao();
   }
 
   ngOnDestroy(){
@@ -79,6 +85,24 @@ export class PagesPage implements OnInit, OnDestroy {
         navigator['app'].exitApp();
       }
     });
+  }
+
+  async openPage(menu: Menu) {
+    if (menu.title === 'Sincronizar') {
+      return;
+    }
+
+   else if (menu.title === 'Sair') {
+      this.authService.logout();
+      location.reload();
+      return;
+    }
+    this.navCtrl.navigateForward([menu.url])
+  }
+
+  async getVersao(){
+    await this.appVersion.getVersionNumber()
+    .then((versaoNumber: string) => this.versionNumber = versaoNumber);
   }
 
   isActive(url: string): boolean {

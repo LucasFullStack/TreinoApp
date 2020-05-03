@@ -6,7 +6,7 @@ export let menu: Menu[] = [
     order: 3,
     title: 'Sincronizar',
     url: null,
-    icon:'flaticon-reload',
+    icon:'sync',
     ativo: true
   },
   {
