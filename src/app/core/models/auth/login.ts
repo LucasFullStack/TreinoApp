@@ -1,6 +1,6 @@
 export class Login{
    grant_Type: string = 'password';
-   userName: string;
+   email: string;
    password: string;
    refreshToken: string;
 }

@@ -8,16 +8,23 @@ const routes: Routes = [
     path: '',
     canActivate: [AuthGuardService],
     component: PagesPage,
+
     children: [
       {
         path: 'treinos',
-        loadChildren: () => import('./treinos/treinos.module').then( m => m.TreinosPageModule)
-      }
-		]
+        loadChildren: () => import('./treinos/treinos.module').then(m => m.TreinosPageModule)
+      },
+      {
+        path: '',
+        redirectTo: 'treinos',
+        pathMatch: 'full'
+      },
+    ]
   },
+
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then( m => m.AuthPageModule)
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthPageModule)
   },
 
 ];
@@ -26,4 +33,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PagesPageRoutingModule {}
+export class PagesPageRoutingModule { }
