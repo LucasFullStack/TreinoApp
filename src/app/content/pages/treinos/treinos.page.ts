@@ -12,4 +12,8 @@ export class TreinosPage implements OnInit {
   ngOnInit() {
   }
 
+  openExercicios(){
+    console.log('open')
+  }
+
 }

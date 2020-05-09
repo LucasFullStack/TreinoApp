@@ -6,12 +6,10 @@ import { NavController, Platform } from '@ionic/angular';
 import { MenuService } from 'src/app/core/services/menu/menu.service';
 import { UsuarioDisplay } from 'src/app/core/models/usuarios/usuario-display';
 import { Subscription } from 'rxjs';
-import { UsuariosService } from 'src/app/core/services/usuarios/usuarios.service';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { AuthenticationService } from 'src/app/core/services/auth/authentication.service';
 
 let _checkRouteEvents$: Subscription = new Subscription();
-let _getUsuarioDisplay$: Subscription = new Subscription();
+
 
 @Component({
   selector: 'app-pages',
@@ -20,7 +18,6 @@ let _getUsuarioDisplay$: Subscription = new Subscription();
 })
 export class PagesPage implements OnInit, OnDestroy {
   appTabPages: Menu[];
-  appSidePages: Menu[];
   usuarioDisplay: UsuarioDisplay = new UsuarioDisplay();
   currentRouteUrl: string = this.router.url.split(/[?#]/)[0];
   versionNumber: string;
@@ -29,32 +26,18 @@ export class PagesPage implements OnInit, OnDestroy {
     public navCtrl: NavController,
     private menuService: MenuService,
     private platform: Platform,
-    private usuariosService: UsuariosService,
-    private appVersion: AppVersion,
-    private authService: AuthenticationService) { }
+    private appVersion: AppVersion) { }
 
   ngOnInit() {
     this.checkRouteEvents();
     this.exitApp();
     this.getMenuTabs();
-    this.getMenuSide()
-    this.getUsuarioDisplay();
     this.getVersao();
   }
 
   ngOnDestroy(){
     _checkRouteEvents$.unsubscribe();
-    _getUsuarioDisplay$.unsubscribe();
-  }
-  
-  getUsuarioDisplay(){
-    _getUsuarioDisplay$ = this.usuariosService.getUsuarioDisplay(true)
-                                       .subscribe((data)=>{
-                                         if(data){
-                                           this.usuarioDisplay = data.dados[0];
-                                         }
-                                         console.log(data)
-                                       })
+
   }
 
   checkRouteEvents() {
@@ -72,13 +55,6 @@ export class PagesPage implements OnInit, OnDestroy {
            });
    }
 
-   getMenuSide(){
-    this.menuService.getSideMenu()
-           .then((data)=>{
-             this.appSidePages = data;
-           });
-   }
-
   exitApp() {
     this.platform.backButton.subscribe(() => {
       if (this.currentRouteUrl.endsWith("treinos")) {
@@ -88,15 +64,7 @@ export class PagesPage implements OnInit, OnDestroy {
   }
 
   async openPage(menu: Menu) {
-    if (menu.title === 'Sincronizar') {
-      return;
-    }
 
-   else if (menu.title === 'Sair') {
-      this.authService.logout();
-      location.reload();
-      return;
-    }
     this.navCtrl.navigateForward([menu.url])
   }
 
