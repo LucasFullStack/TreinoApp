@@ -1,42 +1,6 @@
 <ion-app>
-  <ion-menu contentId="menu-content" type="overlay" side="start">
-
-    <ion-header class="navbar-header" color="primary">
-
-      <p class="logo">
-        <img width="35" height="35" src="./../../../assets/img/logo.png" />
-      </p>
-
-      <ion-avatar class="avatar">
-        <img [src]="usuarioDisplay.foto64 ? perfil.foto64: './../../../assets/img/no-user.png'">
-      </ion-avatar>
-
-      <div class="nome">
-        <h5 class="nome-rep">{{usuarioDisplay.display}}</h5>
-      </div>
-    </ion-header>
-
-    <ion-content>
-      <div class="nav-devider"></div>
-      <ion-list lines="none">
-        <ion-menu-toggle auto-hide="false" *ngFor="let p of appSidePages">
-          <ion-item (click)="openPage(p)">
-            <ion-label>
-              {{p.title}}
-            </ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
-    </ion-content>
-
-    <ion-footer>
-      <ion-toolbar>
-        <div *ngIf="versionNumber" class="version">
-          Versão {{ versionNumber }}
-        </div>
-      </ion-toolbar>
-    </ion-footer>
-  </ion-menu>
+  <ion-router-outlet></ion-router-outlet>
+  
   <ion-tabs>
     <ion-tab-bar slot="bottom" [hidden]="hidden">
       <ion-tab-button [ngClass]="{active: isActive(p.url)}" *ngFor="let p of appTabPages" (click)="openPage(p.url)">
@@ -45,10 +9,4 @@
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
-
-  <ion-split-pane when="xs" contentId="menu-content">
-
-    <ion-router-outlet id="menu-content" main></ion-router-outlet>
-
-  </ion-split-pane>
 </ion-app>
