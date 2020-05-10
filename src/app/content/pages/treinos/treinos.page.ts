@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { TreinoComponent } from './treino/treino.component';
+
 
 @Component({
   selector: 'app-treinos',
@@ -7,13 +10,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TreinosPage implements OnInit {
 
-  constructor() { }
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() {
   }
 
-  openExercicios(){
-    console.log('open')
+  async openTreino(){
+    const modal = await this.modalController.create({
+      component: TreinoComponent
+    });
+    return await modal.present();
   }
 
 }
