@@ -8,6 +8,7 @@ import { TreinosPageRoutingModule } from './treinos-routing.module';
 
 import { TreinosPage } from './treinos.page';
 import { TreinoComponent } from './treino/treino.component';
+import { TreinoNovoComponent } from './treino-novo/treino-novo.component';
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { TreinoComponent } from './treino/treino.component';
     IonicModule,
     TreinosPageRoutingModule
   ],
-  declarations: [TreinosPage, TreinoComponent],
-  entryComponents: [TreinoComponent]
+  declarations: [TreinosPage, TreinoComponent, TreinoNovoComponent],
+  entryComponents: [TreinoComponent, TreinoNovoComponent]
 })
 export class TreinosPageModule {}
