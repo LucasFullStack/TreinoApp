@@ -37,6 +37,8 @@ export class RegisterPage implements OnInit, OnDestroy {
     this.form = this.fb.group({
       'firstName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
       'lastName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+      'gender': ['',Validators.compose([Validators.required])],
+      'birthDate': ['', Validators.required],
       'email': ['',  Validators.compose([Validators.required, Validators.pattern(_patternEmail)])],
       'password': ['',Validators.compose([Validators.required, Validators.minLength(4),Validators.maxLength(6)])],
     })
@@ -77,6 +79,8 @@ export class RegisterPage implements OnInit, OnDestroy {
     _register.lastName = _controls['lastName'].value;
     _register.email = _controls['email'].value;
     _register.password = _controls['password'].value;
+    _register.gender = _controls['gender'].value;
+    _register.birthDate = _controls['birthDate'].value;
     return _register;
   }
 

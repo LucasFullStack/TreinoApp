@@ -20,18 +20,32 @@
     </ion-item>
 
     <ion-item lines="full">
+      <ion-label>Sexo</ion-label>
+      <ion-select formControlName="gender">
+        <ion-select-option value="f">Feminino</ion-select-option>
+        <ion-select-option value="m">Masculino</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Data Nascimento</ion-label>
+      <ion-datetime formControlName="birthDate" max="2000" displayFormat="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+
+    <ion-item lines="full">
       <ion-label position="floating">Email</ion-label>
       <ion-input maxlength="50" formControlName="email" type="text" required></ion-input>
     </ion-item>
 
     <ion-item lines="full">
       <ion-label position="floating">Senha</ion-label>
-      <ion-input maxlength="6" formControlName="password"  type="password" required></ion-input>
+      <ion-input maxlength="6" formControlName="password" type="password" required></ion-input>
     </ion-item>
 
     <ion-row>
       <ion-col>
-        <ion-button [disabled]="form.invalid" (click)="onSubmit()" type="submit" color="danger" expand="block">Criar conta</ion-button>
+        <ion-button [disabled]="form.invalid" (click)="onSubmit()" type="submit" color="danger" expand="block">Criar
+          conta</ion-button>
       </ion-col>
     </ion-row>
   </form>
