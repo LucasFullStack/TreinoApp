@@ -6,7 +6,7 @@ export let menu: Menu[] = [
     order: 1,
     title: 'Treinos',
     url: '/treinos',
-    icon: 'home',
+    icon: 'barbell-outline',
     ativo: true
   }
 ]

@@ -1,20 +1,28 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="chevron-down-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
     <ion-title>Novo Treino</ion-title>
+    <ion-buttons slot="end">
+      <ion-button></ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  
+
   <ion-list-header>
-    <ion-label>Selecione o dia que deseja iniciar o treino</ion-label>
+    <ion-label>Qual o dia deseja iniciar o treino?</ion-label>
   </ion-list-header>
 
   <ion-list>
-    <ion-item lines="none">
-      <ion-button expand="full">Segunta-feira</ion-button>
+    <ion-item *ngFor="let dia of semanaDias" lines="none">
+      <ion-button expand="full" (click)="novoTreino(dia)">{{dia.semanaDia}}</ion-button>
     </ion-item>
   </ion-list>
 
 </ion-content>
-

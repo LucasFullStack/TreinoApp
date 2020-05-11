@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 import { timer, Subscription, Subject } from 'rxjs';
+import { Treinos } from 'src/app/core/models/treinos/treinos';
 
 @Component({
   selector: 'app-treino',
@@ -12,10 +13,13 @@ export class TreinoComponent implements OnInit {
   timer: number;
   startTreino: boolean = false;
   cronometro: string;
+  treino: Treinos = this.navParams.get('treino');
 
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController,
+              private navParams: NavParams) { }
 
   ngOnInit() {
+    console.log(this.treino)
 
   }
 

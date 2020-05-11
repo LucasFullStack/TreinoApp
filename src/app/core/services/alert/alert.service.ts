@@ -27,10 +27,10 @@ export class AlertService {
     await _alert.present();
   }
 
-  async presentAlertConfirm(msg: string) {
+  async presentAlertConfirm(header: string,msg: string) {
     let choice;
     const alert = await this.alertController.create({
-      header: 'Atenção!',
+      header: header,
       message: msg,
       buttons: [
         {
