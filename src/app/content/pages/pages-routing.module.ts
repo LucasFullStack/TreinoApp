@@ -15,6 +15,10 @@ const routes: Routes = [
         loadChildren: () => import('./treinos/treinos.module').then(m => m.TreinosPageModule)
       },
       {
+        path: 'perfil',
+        loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
+      },
+      {
         path: '',
         redirectTo: 'treinos',
         pathMatch: 'full'
@@ -26,6 +30,7 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthPageModule)
   },
+
 
 ];
 

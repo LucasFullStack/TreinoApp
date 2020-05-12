@@ -8,5 +8,13 @@ export let menu: Menu[] = [
     url: '/treinos',
     icon: 'barbell-outline',
     ativo: true
+  },
+  {
+    typeMenu: 'Tabs',
+    order: 1,
+    title: 'Perfil',
+    url: '/perfil',
+    icon: 'person',
+    ativo: true
   }
 ]

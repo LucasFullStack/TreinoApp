@@ -6,7 +6,11 @@
 
 <ion-content color="light">
 
-  <ion-card (click)="openNovoTreino()">
+  <ion-refresher slot="fixed" (ionRefresh)="getTreinosSemana(true,$event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card *ngIf="(this.treinosSemana.dataFim < this.date.toISOString())" (click)="openNovoTreino()">
     <ion-item>
       <ion-icon name="add-circle-outline"></ion-icon>
       <ion-card-header>
@@ -26,7 +30,6 @@
       <ion-row justify-content-between>
         <ion-col col-11>
           <ion-card-title>{{treino.divisao}}</ion-card-title>
-        
         </ion-col>
         <ion-col col-1>
           <span class="pull-right" item-right>{{ treino.semanaDia }}</span>
@@ -43,10 +46,7 @@
         <ion-label>{{ treino.qtdExercicios}} Exercicios
           <p> <span> </span></p>
         </ion-label>
-    
-          <ion-icon (click)="openTreino(treino)" name="play-circle-outline"></ion-icon>
-  
-   
+        <ion-icon name="play-circle-outline"></ion-icon>
       </ion-item>
     </ion-list>
   </ion-card>
