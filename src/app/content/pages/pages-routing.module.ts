@@ -15,8 +15,8 @@ const routes: Routes = [
         loadChildren: () => import('./treinos/treinos.module').then(m => m.TreinosPageModule)
       },
       {
-        path: 'perfil',
-        loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
+        path: 'conta',
+        loadChildren: () => import('./conta/conta.module').then( m => m.ContaPageModule)
       },
       {
         path: '',
@@ -30,6 +30,7 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthPageModule)
   },
+
 
 
 ];

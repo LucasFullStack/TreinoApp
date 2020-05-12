@@ -25,7 +25,7 @@
     <ion-label>{{ treinosSemana.tipo }}</ion-label>
   </ion-list-header>
 
-  <ion-card *ngFor="let treino of treinosSemana.treinos" >
+  <ion-card *ngFor="let treino of treinosSemana.treinos" (click)="openTreino(treino)">
     <ion-card-header>
       <ion-row justify-content-between>
         <ion-col col-11>

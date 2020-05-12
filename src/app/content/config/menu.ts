@@ -12,8 +12,8 @@ export let menu: Menu[] = [
   {
     typeMenu: 'Tabs',
     order: 1,
-    title: 'Perfil',
-    url: '/perfil',
+    title: 'Conta',
+    url: '/conta',
     icon: 'person',
     ativo: true
   }
