@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  API_URL: 'http://192.168.0.100/',
+  API_URL: 'http://treinoapi.ddns.net:81/',
   production: false
 };
 
