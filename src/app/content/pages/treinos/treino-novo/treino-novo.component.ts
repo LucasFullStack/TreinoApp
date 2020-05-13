@@ -63,7 +63,6 @@ export class TreinoNovoComponent implements OnInit, OnDestroy {
     )
       .subscribe(() => {
         this.alertService.presentSuccessAlertDefault('Treino liberado!', 'Seu novo treino já está disponivel');
-
       }, (error) => {
         this.alertService.presentSuccessAlertDefault('Atenção!', error.error);
       })

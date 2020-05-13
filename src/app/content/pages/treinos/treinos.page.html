@@ -10,7 +10,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngIf="(this.treinosSemana.dataFim < this.date.toISOString())" (click)="openNovoTreino()">
+  <ion-card *ngIf="enbaleTreinoNovo(this.treinosSemana?.dataFim)" (click)="openNovoTreino()">
     <ion-item>
       <ion-icon name="add-circle-outline"></ion-icon>
       <ion-card-header>
@@ -22,17 +22,17 @@
   </ion-card>
 
   <ion-list-header>
-    <ion-label>{{ treinosSemana.tipo }}</ion-label>
+    <ion-label>{{ treinosSemana?.tipo }}</ion-label>
   </ion-list-header>
 
-  <ion-card *ngFor="let treino of treinosSemana.treinos" (click)="openTreino(treino)">
+  <ion-card *ngFor="let treino of treinosSemana?.treinos" (click)="openTreino(treino)">
     <ion-card-header>
       <ion-row justify-content-between>
         <ion-col col-11>
-          <ion-card-title>{{treino.divisao}}</ion-card-title>
+          <ion-card-title>{{treino?.divisao}}</ion-card-title>
         </ion-col>
         <ion-col col-1>
-          <span class="pull-right" item-right>{{ treino.semanaDia }}</span>
+          <span class="pull-right" item-right>{{ treino?.semanaDia }}</span>
         </ion-col>
       </ion-row>
     </ion-card-header>
@@ -43,7 +43,7 @@
         </ion-chip>
       </ion-item>
       <ion-item lines="none">
-        <ion-label>{{ treino.qtdExercicios}} Exercicios
+        <ion-label>{{ treino?.qtdExercicios}} Exercicios
           <p> <span> </span></p>
         </ion-label>
         <ion-icon name="play-circle-outline"></ion-icon>

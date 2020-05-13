@@ -25,11 +25,17 @@ export class TreinosPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getTreinosSemana();
-    console.log(this.date.toISOString())
   }
 
   ngOnDestroy() {
     _getTreinosSemana$.unsubscribe();
+  }
+
+  enbaleTreinoNovo(dataFim: string){
+    if(dataFim != undefined && dataFim != null){
+      return this.date.toISOString() > dataFim;
+    }
+    return true;
   }
 
 
@@ -43,9 +49,9 @@ export class TreinosPage implements OnInit, OnDestroy {
       })
     )
       .subscribe((result) => {
+        console.log(result)
         if (result) {
           this.treinosSemana = result.dados[0];
-          this.treinosSemana.dataFim
         }
       })
   }

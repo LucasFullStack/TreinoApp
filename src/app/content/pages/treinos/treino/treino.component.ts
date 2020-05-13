@@ -19,8 +19,6 @@ export class TreinoComponent implements OnInit {
               private navParams: NavParams) { }
 
   ngOnInit() {
-    console.log(this.treino)
-
   }
 
   iniciarTreino(){
