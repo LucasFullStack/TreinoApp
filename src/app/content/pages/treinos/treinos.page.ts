@@ -60,6 +60,13 @@ export class TreinosPage implements OnInit, OnDestroy {
     const modal = await this.modalController.create({
       component: TreinoNovoComponent
     });
+
+    modal.onDidDismiss()
+    .then((result) => {
+      if (result.data){    
+       this.getTreinosSemana(true)
+      }         
+    });
     return await modal.present();
   }
 

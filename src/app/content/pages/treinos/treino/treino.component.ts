@@ -1,14 +1,22 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { timer, Subscription, Subject } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { Treinos } from 'src/app/core/models/treinos/treinos';
+import { TreinosService } from 'src/app/core/services/treinos/treinos.service';
+import { UtilService } from 'src/app/core/services/util/util.service';
+import { TreinoSemanaEdit } from 'src/app/core/models/treinos/treino-semana-edit';
+import { LoadingService } from 'src/app/core/services/loading/loading.service';
+import { AlertService } from 'src/app/core/services/alert/alert.service';
+import { finalize } from 'rxjs/operators';
+
+let _putTreinoSemana$ = new Subscription();
 
 @Component({
   selector: 'app-treino',
   templateUrl: './treino.component.html',
   styleUrls: ['./treino.component.scss'],
 })
-export class TreinoComponent implements OnInit {
+export class TreinoComponent implements OnInit, OnDestroy {
   subscribeTimer: Subscription = new Subscription();
   timer: number;
   startTreino: boolean = false;
@@ -16,9 +24,17 @@ export class TreinoComponent implements OnInit {
   treino: Treinos = this.navParams.get('treino');
 
   constructor(private modalController: ModalController,
-              private navParams: NavParams) { }
+              private navParams: NavParams,
+              private treinosService: TreinosService,
+              private utilService: UtilService,
+              private loadingService: LoadingService,
+              private alertService: AlertService) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(){
+    _putTreinoSemana$.unsubscribe();
   }
 
   iniciarTreino(){
@@ -27,7 +43,19 @@ export class TreinoComponent implements OnInit {
   }
 
   finalizarTreino(){
+    this.loadingService.presentLoading('Salvando...');
     this.startTreino = !this.startTreino;
+    const _treinoSemana = this.prepareTreinoSemana(); 
+    this.putTreinoSemana(_treinoSemana);
+  }
+
+  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit){
+    _putTreinoSemana$ = this.treinosService.putTreinoSemana(treinoSemanaEdit).pipe(
+      finalize(()=>{
+        this.loadingService.dismissLoading();
+      })
+    ).subscribe(()=> this.modalController.dismiss(true),
+    (error)=> this.alertService.presentErrorAlertDefault('Atenção!',error.error))
   }
 
   startTimer() {
@@ -55,9 +83,18 @@ export class TreinoComponent implements OnInit {
     this.subscribeTimer.unsubscribe();
   }
 
+  prepareTreinoSemana(): TreinoSemanaEdit{
+    const _treinoSemana = new TreinoSemanaEdit();
+    _treinoSemana.idTreinoUsuario = this.treino.idTreinoUsuario;
+    _treinoSemana.executado = true;
+    _treinoSemana.dataExecucao = this.utilService.getDateTimeNow();
+    _treinoSemana.tempoTreino = this.timer;
+    return _treinoSemana;
+
+  }
+
   close() {
     this.modalController.dismiss();
   }
-
 
 }

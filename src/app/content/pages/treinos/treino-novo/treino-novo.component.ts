@@ -5,11 +5,11 @@ import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { AlertService } from 'src/app/core/services/alert/alert.service';
 import { LoadingService } from 'src/app/core/services/loading/loading.service';
-import { TreinoNovo } from 'src/app/core/models/treinos/treino-novo';
 import { finalize } from 'rxjs/operators';
+import { TreinoSemanaAdd } from 'src/app/core/models/treinos/treino-semana-add';
 
 let _getSemanaDias$ = new Subscription();
-let _postTreinoNovo$ = new Subscription();
+let _postTreinoSemana$ = new Subscription();
 
 @Component({
   selector: 'app-treino-novo',
@@ -46,16 +46,16 @@ export class TreinoNovoComponent implements OnInit, OnDestroy {
     this.alertService.presentAlertConfirm('Novo treino', 'Confirma o início do treino na ' + semanaDia.semanaDia + '?')
       .then((value) => {
         if (value == 'yes') {
-          this.postTreinoNovo();
+          this.postTreinoSemana();
         }
       })
   }
 
-  postTreinoNovo() {
+  postTreinoSemana() {
     this.loadingService.presentLoading('Solicitando novo treino...');
-    const _treinoNovo = new TreinoNovo();
-    _treinoNovo.idSemanaDia = this.idSemanaDia;
-    _postTreinoNovo$ = this.treinosService.postTreinoNovo(_treinoNovo).pipe(
+    const _treinoSemanaAdd = new TreinoSemanaAdd();
+    _treinoSemanaAdd.idSemanaDia = this.idSemanaDia;
+    _postTreinoSemana$ = this.treinosService.postTreinoSemana(_treinoSemanaAdd).pipe(
       finalize(() => {
         this.loadingService.dismissLoading();
         this.modalController.dismiss(true);
@@ -77,7 +77,7 @@ export class TreinoNovoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     _getSemanaDias$.unsubscribe();
-    _postTreinoNovo$.unsubscribe();
+    _postTreinoSemana$.unsubscribe();
   }
 
 }

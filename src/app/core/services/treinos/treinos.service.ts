@@ -4,7 +4,8 @@ import { Result } from '../../models/helpers/result';
 import { TreinosStorage } from './treinos.storage';
 import { HttpClient } from '@angular/common/http';
 import { concatMap, map, catchError } from 'rxjs/operators';
-import { TreinoNovo } from '../../models/treinos/treino-novo';
+import { TreinoSemanaAdd } from '../../models/treinos/treino-semana-add';
+import { TreinoSemanaEdit } from '../../models/treinos/treino-semana-edit';
 
 @Injectable({
   providedIn: 'root'
@@ -45,9 +46,9 @@ export class TreinosService {
     }
   }
 
-  postTreinoNovo(treinoNovo: TreinoNovo): Observable<string> {
+  postTreinoSemana(treinoSemanaAdd: TreinoSemanaAdd): Observable<string> {
     const API_URL = this.treinosStorage.getAPI_URL();
-    return this.http.post<string>(API_URL + '/Treino/Semana', treinoNovo).pipe(
+    return this.http.post<string>(API_URL + '/Treino/Semana', treinoSemanaAdd).pipe(
       map((result: string) => {
         return result;
       }),
@@ -55,7 +56,18 @@ export class TreinosService {
         return throwError(err);
       })
     );
+  }
 
+  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit): Observable<string> {
+    const API_URL = this.treinosStorage.getAPI_URL();
+    return this.http.put<string>(API_URL + '/Treino/Semana', treinoSemanaEdit).pipe(
+      map((result: string) => {
+        return result;
+      }),
+      catchError(err => {
+        return throwError(err);
+      })
+    );
   }
 
 }
