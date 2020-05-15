@@ -15,6 +15,6 @@ export let menu: Menu[] = [
     title: 'Conta',
     url: '/conta',
     icon: 'person',
-    ativo: true
+    ativo: false
   }
 ]
