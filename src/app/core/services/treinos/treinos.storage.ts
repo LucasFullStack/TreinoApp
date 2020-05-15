@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { environment } from 'src/environments/environment';
 import { HttpParams } from '@angular/common/http';
+import { Treinos } from '../../models/treinos/treinos';
 
 const API_STORAGE_KEY = 'treinos';
 const API_URL = environment.API_URL + "api/treinos";
@@ -25,6 +26,15 @@ export class TreinosStorage {
     return API_URL + "/Treino/Semana?" + params.toString();
   }
 
+  getLocalTreinoSemana(){
+    let _key = this.getKeyTreinoSemana();
+    return  this.getLocalData(_key);
+  }
+
+  setLocalTreinoSemana(treino: Treinos){
+     let _key = this.getKeyTreinoSemana();
+     return this.setLocalData(_key, treino)
+  }
 
   getAPI_URL(){
     return API_URL;

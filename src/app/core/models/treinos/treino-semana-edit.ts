@@ -3,4 +3,6 @@ export class TreinoSemanaEdit{
     executado: boolean;
     tempoTreino: number;
     dataExecucao: string;
+    finalizar: boolean;
+    treinando: boolean;
 }

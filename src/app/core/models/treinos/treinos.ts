@@ -5,7 +5,8 @@ export class Treinos{
     idTreinoUsuario: number;
     executado: boolean;
     tempoTreino: number;
-    dataExecucao: Date;
+    treinando: boolean;
+    dataExecucao: string;
     semanaDia: string;
     divisao: string;
     qtdExercicios: number;

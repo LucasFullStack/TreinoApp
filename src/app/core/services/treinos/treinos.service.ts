@@ -8,6 +8,7 @@ import { TreinoSemanaAdd } from '../../models/treinos/treino-semana-add';
 import { TreinoSemanaEdit } from '../../models/treinos/treino-semana-edit';
 import { NetworkService, ConnectionStatus } from '../network/network.service';
 import { OfflineManagerService } from '../offline-manager/offline-manager.service';
+import { Treinos } from '../../models/treinos/treinos';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ import { OfflineManagerService } from '../offline-manager/offline-manager.servic
 export class TreinosService {
 
   constructor(private treinosStorage: TreinosStorage,
-              private http: HttpClient,
-              private networkService: NetworkService,
-              private offlineManager: OfflineManagerService) { }
+    private http: HttpClient,
+    private networkService: NetworkService,
+    private offlineManager: OfflineManagerService) { }
 
   getTreinosSemana(forceRefresh = false): Observable<Result> {
 
@@ -63,9 +64,9 @@ export class TreinosService {
   }
 
   putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit): Observable<any> {
-   
-    const API_URL = this.treinosStorage.getAPI_URL() + '/Treino/Semana';
 
+    const API_URL = this.treinosStorage.getAPI_URL() + '/Treino/Semana';
+    
     if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
       return forkJoin([
         from(this.offlineManager.storeRequest(API_URL, 'PUT', treinoSemanaEdit))
@@ -73,7 +74,7 @@ export class TreinosService {
     } else {
       return this.http.put(API_URL, treinoSemanaEdit).pipe(
         catchError(err => {
-          return  forkJoin([
+          return forkJoin([
             throwError(err),
             from(this.offlineManager.storeRequest(API_URL, 'PUT', treinoSemanaEdit))
           ])
@@ -82,4 +83,8 @@ export class TreinosService {
     }
   }
 
+  async updateTreinoSemana(treino: Treinos) {
+    let _result: Result = await this.treinosStorage.getLocalTreinoSemana();
+    _result.dados = [treino]
+  }
 }

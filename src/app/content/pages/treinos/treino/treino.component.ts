@@ -31,6 +31,7 @@ export class TreinoComponent implements OnInit, OnDestroy {
               private alertService: AlertService) { }
 
   ngOnInit() {
+    console.log(this.treino)
   }
 
   ngOnDestroy(){
@@ -39,13 +40,18 @@ export class TreinoComponent implements OnInit, OnDestroy {
 
   iniciarTreino(){
     this.startTreino = !this.startTreino;
+    this.treino.treinando = true;
     this.startTimer();
   }
 
   finalizarTreino(){
     this.loadingService.presentLoading('Salvando...');
+    this.treino.treinando = false;
+    this.stopTimer();
     this.startTreino = !this.startTreino;
-    const _treinoSemana = this.prepareTreinoSemana(); 
+    this.treino.executado = true;
+    this.treino.dataExecucao = this.utilService.getDateTimeNow();
+    const _treinoSemana = this.prepareTreinoSemana(true); 
     this.putTreinoSemana(_treinoSemana);
   }
 
@@ -61,7 +67,11 @@ export class TreinoComponent implements OnInit, OnDestroy {
   startTimer() {
     this.subscribeTimer = timer(1000, 2000).subscribe(val => {
       this.timer = val;
+      this.treino.tempoTreino = this.timer; 
       this.cronometro = this.transforma_magicamente(this.timer);
+      const _treinoSemana = this.prepareTreinoSemana(); 
+      this.treinosService.putTreinoSemana(_treinoSemana).toPromise();
+      this.treinosService.updateTreinoSemana(this.treino)
     });
   }
 
@@ -83,14 +93,15 @@ export class TreinoComponent implements OnInit, OnDestroy {
     this.subscribeTimer.unsubscribe();
   }
 
-  prepareTreinoSemana(): TreinoSemanaEdit{
+  prepareTreinoSemana(finalizar: boolean = false): TreinoSemanaEdit{
     const _treinoSemana = new TreinoSemanaEdit();
     _treinoSemana.idTreinoUsuario = this.treino.idTreinoUsuario;
-    _treinoSemana.executado = true;
-    _treinoSemana.dataExecucao = this.utilService.getDateTimeNow();
-    _treinoSemana.tempoTreino = this.timer;
+    _treinoSemana.executado = this.treino.executado;
+    _treinoSemana.dataExecucao = this.treino.dataExecucao;
+    _treinoSemana.tempoTreino = this.treino.tempoTreino;
+    _treinoSemana.finalizar = finalizar;
+    _treinoSemana.treinando = this.treino.treinando;
     return _treinoSemana;
-
   }
 
   close() {
