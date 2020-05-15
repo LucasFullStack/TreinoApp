@@ -7,11 +7,9 @@ import { ToastController } from '@ionic/angular';
 import { Guid } from 'guid-typescript';
 import { UtilService } from '../util/util.service';
 
-
 let STORAGE_REQ_KEY = 'storedreq';
 
 interface StoredRequest {
-  idUsuario: number;
   url: string,
   type: string,
   data: any,
@@ -76,7 +74,6 @@ export class OfflineManagerService {
   storeRequest(url, type, data?) {
 
     let action: StoredRequest = {
-      idUsuario: Number(sessionStorage.getItem('idUsuario')),
       url: url,
       type: type,
       data: data,

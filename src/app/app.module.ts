@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationModule } from './core/services/auth/authentication.module';
 import { IonicStorageModule } from '@ionic/storage';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
     StatusBar,
     SplashScreen,
     AppVersion,
+    Network,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
