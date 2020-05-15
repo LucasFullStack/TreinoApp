@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, throwError } from 'rxjs';
+import { Observable, from, throwError, forkJoin } from 'rxjs';
 import { Result } from '../../models/helpers/result';
 import { TreinosStorage } from './treinos.storage';
 import { HttpClient } from '@angular/common/http';
 import { concatMap, map, catchError } from 'rxjs/operators';
 import { TreinoSemanaAdd } from '../../models/treinos/treino-semana-add';
 import { TreinoSemanaEdit } from '../../models/treinos/treino-semana-edit';
+import { NetworkService, ConnectionStatus } from '../network/network.service';
+import { OfflineManagerService } from '../offline-manager/offline-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,9 @@ import { TreinoSemanaEdit } from '../../models/treinos/treino-semana-edit';
 export class TreinosService {
 
   constructor(private treinosStorage: TreinosStorage,
-    private http: HttpClient) { }
+              private http: HttpClient,
+              private networkService: NetworkService,
+              private offlineManager: OfflineManagerService) { }
 
   getTreinosSemana(forceRefresh = false): Observable<Result> {
 
@@ -58,16 +62,24 @@ export class TreinosService {
     );
   }
 
-  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit): Observable<string> {
-    const API_URL = this.treinosStorage.getAPI_URL();
-    return this.http.put<string>(API_URL + '/Treino/Semana', treinoSemanaEdit).pipe(
-      map((result: string) => {
-        return result;
-      }),
-      catchError(err => {
-        return throwError(err);
-      })
-    );
+  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit): Observable<any> {
+   
+    const API_URL = this.treinosStorage.getAPI_URL() + '/Treino/Semana';
+
+    if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
+      return forkJoin([
+        from(this.offlineManager.storeRequest(API_URL, 'PUT', treinoSemanaEdit))
+      ])
+    } else {
+      return this.http.put(API_URL, treinoSemanaEdit).pipe(
+        catchError(err => {
+          return  forkJoin([
+            throwError(err),
+            from(this.offlineManager.storeRequest(API_URL, 'PUT', treinoSemanaEdit))
+          ])
+        })
+      );
+    }
   }
 
 }

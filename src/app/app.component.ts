@@ -20,7 +20,6 @@ export class AppComponent {
     private offlineManager: OfflineManagerService
   ) {
     this.initializeApp();
-    localStorage.clear();
   }
 
   initializeApp() {

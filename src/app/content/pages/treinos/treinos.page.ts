@@ -47,8 +47,7 @@ export class TreinosPage implements OnInit, OnDestroy {
         }
         this.cdr.detectChanges();
       })
-    )
-      .subscribe((result) => {
+    ).subscribe((result) => {
         console.log(result)
         if (result) {
           this.treinosSemana = result.dados[0];
