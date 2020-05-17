@@ -14,7 +14,7 @@ export class UtilService {
   }
 
   
-  transforma_seguntosEmHoras(s) {
+  transforma_segundosEmHoras(s) {
     function duas_casas(numero) {
       if (numero <= 9) {
         numero = "0" + numero;

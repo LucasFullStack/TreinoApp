@@ -43,8 +43,8 @@
         </ion-chip>
       </ion-item>
       <ion-item lines="none">
-        <ion-label>{{ treino?.qtdExercicios}} Exercicios
-          <p> <span>  </span></p>
+        <ion-label>{{ treino?.qtdExercicios}} exercicios
+          <p *ngIf="treino.tempoTreino > 0" style="padding-top: 10px;"> <span>  Tempo médio gasto:  {{ getTempMedioTreino( treino.tempoTreino ) }} </span></p>
         </ion-label>
         <ion-icon name="play-circle-outline"></ion-icon>
       </ion-item>
