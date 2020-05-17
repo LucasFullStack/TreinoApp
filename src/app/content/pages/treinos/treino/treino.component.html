@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title> {{ treino.divisao }}</ion-title>
-    <ion-buttons  (click)="close()" slot="start" class="title-toolbar">
+    <ion-buttons (click)="close()" slot="start" class="title-toolbar">
       <ion-button>
         <ion-icon style="font-size: 25px" name="chevron-down-outline"></ion-icon>
       </ion-button>
@@ -10,27 +10,22 @@
       <ion-icon name="timer-outline"></ion-icon> {{ utilService.transforma_segundosEmHoras( treino.tempoTreino ) }}
     </ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 <ion-content>
-
   <ion-list>
-    <ion-item *ngFor="let exercicio of treino.exercicios">
+    <ion-item *ngFor="let exercicio of treino.exercicios; let i = index">
       <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+        <span class="dot"> {{ i + 1 }}  </span>
       </ion-avatar>
       <ion-label>{{ exercicio.exercicio }}
         <p style="padding-top: 1px;"><span> {{ exercicio.sxR }}</span></p>
       </ion-label>
     </ion-item>
   </ion-list>
-
   <ion-list-header>
     <ion-label>Intervalo de {{ treino.intervalo }}</ion-label>
   </ion-list-header>
 </ion-content>
-
 <ion-footer>
   <ion-button *ngIf="!treino.treinando && !treino.dataExecucao" (click)="iniciarTreino()" expand="full">Iniciar treino
   </ion-button>
