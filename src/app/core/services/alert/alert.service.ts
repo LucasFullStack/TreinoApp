@@ -17,7 +17,29 @@ export class AlertService {
     await _alert.present();
   }
 
-  
+  async presentAlert(header: string, msg: string) {
+    let choice;
+    const alert = await this.alertController.create({
+      header: header,
+      message: msg,
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'yes',
+          handler: () => {
+          }
+        }
+      ]
+    });
+    await alert.present();
+
+    await alert.onDidDismiss().then((data) => {
+      choice = data
+    })
+    return choice.role;
+  }
+
+
   async presentErrorAlertDefault(header: string, message: string) {
     const _alert = await this.alertController.create({
       header: header,
@@ -27,7 +49,7 @@ export class AlertService {
     await _alert.present();
   }
 
-  async presentAlertConfirm(header: string,msg: string) {
+  async presentAlertConfirm(header: string, msg: string) {
     let choice;
     const alert = await this.alertController.create({
       header: header,
@@ -50,8 +72,8 @@ export class AlertService {
 
     await alert.onDidDismiss().then((data) => {
       choice = data
-  })
-   return choice.role;
+    })
+    return choice.role;
   }
 
   async presentAlertConfirmCustomCss(msg: string, cssClass: string) {
@@ -78,8 +100,8 @@ export class AlertService {
 
     await alert.onDidDismiss().then((data) => {
       choice = data
-  })
-   return choice.role;
+    })
+    return choice.role;
   }
 
   async presentAlertConfirmChanges(msg: string) {
@@ -88,27 +110,27 @@ export class AlertService {
       header: 'Atenção!',
       message: msg,
       buttons: [
-   
+
         {
           text: 'Cancelar',
           handler: () => {
           }
         },
-  
+
         {
           text: 'Não',
           role: 'no',
           cssClass: 'secondary',
           handler: (blah) => {
           }
-        }, 
+        },
         {
           text: 'Sim',
           role: 'yes',
           handler: () => {
           }
         },
-        
+
       ]
     });
 
@@ -116,8 +138,8 @@ export class AlertService {
 
     await alert.onDidDismiss().then((data) => {
       choice = data
-  })
-   return choice.role;
+    })
+    return choice.role;
   }
 
 }

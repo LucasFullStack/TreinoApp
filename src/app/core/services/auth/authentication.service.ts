@@ -104,9 +104,6 @@ export class AuthenticationService implements AuthService {
 	 * @returns {boolean}
 	 */
 	refreshShouldHappen(response: HttpErrorResponse): boolean {
-		if(response.status === 401){
-			this.refreshToken().toPromise();
-		}
 		return response.status === 401;
 	}
 
