@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from './../../../../environments/environment'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { throwError, Observable } from 'rxjs';
+import { throwError, Observable, from } from 'rxjs';
 import { Register } from './../../models/auth/register';
 import { TokenStorageService } from './token-storage.service';
 import { AccessData } from '../../models/auth/access-data';
@@ -19,6 +19,11 @@ export class AuthenticationService implements AuthService {
 		private tokenStorage: TokenStorageService) { }
 
 
+	/**
+	 * Submit login request
+	 * @param {Credential} credential
+	 * @returns {Observable<any>}
+	 */
 	postLogin(login: Login): Observable<any> {
 		return this.http.post<any>(this.API_URL + "/login", login).pipe(
 			map((result: any) => {
@@ -46,6 +51,13 @@ export class AuthenticationService implements AuthService {
 
 	}
 
+	/**
+ * Function, that should perform refresh token verifyTokenRequest
+ * @description Should be successfully completed so interceptor
+ * can execute pending requests or retry original one
+ * @returns {Observable<any>}
+ */
+
 	refreshToken(): Observable<AccessData> {
 		return this.tokenStorage.getRefreshToken()
 			.pipe(
@@ -53,7 +65,14 @@ export class AuthenticationService implements AuthService {
 					const _login: Login = new Login();
 					_login.grant_Type = "refresh_token";
 					_login.refreshToken = refreshToken;
-					return this.postLogin(_login)
+					return this.http.post<any>(this.API_URL + "/login", _login)
+				}),
+				map((result: any) => {
+					console.log(result)
+					if (result instanceof Array) {
+						return result.pop();
+					}
+					return result;
 				}),
 				tap(this.saveAccessData.bind(this)),
 				catchError(err => {
@@ -67,11 +86,27 @@ export class AuthenticationService implements AuthService {
 		return this.tokenStorage.getAccessToken().pipe(map(token => !!token));
 	}
 
+	/**
+ * Get access token
+ * @description Should return access token in Observable from e.g. localStorage
+ * @returns {Observable<string>}
+ */
 	getAccessToken(): Observable<string> {
 		return this.tokenStorage.getAccessToken();
 	}
 
+
+	/**
+	 * Function, checks response of failed request to determine,
+	 * whether token be refreshed or not.
+	 * @description Essentialy checks status
+	 * @param {Response} response
+	 * @returns {boolean}
+	 */
 	refreshShouldHappen(response: HttpErrorResponse): boolean {
+		if(response.status === 401){
+			this.refreshToken().toPromise();
+		}
 		return response.status === 401;
 	}
 
@@ -94,6 +129,24 @@ export class AuthenticationService implements AuthService {
 				.setExpiration(accessData.expiration)
 				.setRefreshToken(accessData.refreshToken)
 		}
+	}
+
+
+	/**
+	 * Handle Http operation that failed.
+	 * Let the app continue.
+	 * @param operation - name of the operation that failed
+	 * @param result - optional value to return as the observable result
+	 */
+	private handleError<T>(operation = 'operation', result?: any) {
+		return (error: any): Observable<any> => {
+			// TODO: send the error to remote logging infrastructure
+			console.error(error); // log to console instead
+
+			// Let the app keep running by returning an empty result.
+			return from(result);
+
+		};
 	}
 
 }

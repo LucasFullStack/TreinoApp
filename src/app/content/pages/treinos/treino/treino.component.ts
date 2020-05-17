@@ -18,82 +18,68 @@ let _putTreinoSemana$ = new Subscription();
 })
 export class TreinoComponent implements OnInit, OnDestroy {
   subscribeTimer: Subscription = new Subscription();
-  timer: number;
   startTreino: boolean = false;
-  cronometro: string;
   treino: Treinos = this.navParams.get('treino');
+  tempoTreino: number = this.treino.tempoTreino;
 
   constructor(private modalController: ModalController,
-              private navParams: NavParams,
-              private treinosService: TreinosService,
-              private utilService: UtilService,
-              private loadingService: LoadingService,
-              private alertService: AlertService) { }
+    private navParams: NavParams,
+    private treinosService: TreinosService,
+    public utilService: UtilService,
+    private loadingService: LoadingService,
+    private alertService: AlertService) { }
 
   ngOnInit() {
-    console.log(this.treino)
+    if (this.treino.treinando && !this.treino.dataExecucao) {
+      this.iniciarTreino();
+    }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     _putTreinoSemana$.unsubscribe();
+    this.stopTimer();
   }
 
-  iniciarTreino(){
+  iniciarTreino() {
     this.startTreino = !this.startTreino;
     this.treino.treinando = true;
     this.startTimer();
   }
 
-  finalizarTreino(){
+  finalizarTreino() {
+    this.startTreino = !this.startTreino;
     this.loadingService.presentLoading('Salvando...');
     this.treino.treinando = false;
     this.stopTimer();
-    this.startTreino = !this.startTreino;
     this.treino.executado = true;
     this.treino.dataExecucao = this.utilService.getDateTimeNow();
-    const _treinoSemana = this.prepareTreinoSemana(true); 
+    const _treinoSemana = this.prepareTreinoSemana(true);
     this.putTreinoSemana(_treinoSemana);
   }
 
-  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit){
+  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit) {
     _putTreinoSemana$ = this.treinosService.putTreinoSemana(treinoSemanaEdit).pipe(
-      finalize(()=>{
+      finalize(() => {
         this.loadingService.dismissLoading();
       })
-    ).subscribe(()=> this.modalController.dismiss(true),
-    (error)=> this.alertService.presentErrorAlertDefault('Atenção!',error.error))
+    ).subscribe(() => this.modalController.dismiss(true),
+      (error) => this.alertService.presentErrorAlertDefault('Atenção!', error.error))
   }
 
   startTimer() {
     this.subscribeTimer = timer(1000, 2000).subscribe(val => {
-      this.timer = val;
-      this.treino.tempoTreino = this.timer; 
-      this.cronometro = this.transforma_magicamente(this.timer);
-      const _treinoSemana = this.prepareTreinoSemana(); 
+      this.treino.tempoTreino = this.tempoTreino + val;
+      const _treinoSemana = this.prepareTreinoSemana();
       this.treinosService.putTreinoSemana(_treinoSemana).toPromise();
       this.treinosService.updateTreinoSemana(this.treino)
     });
-  }
-
-  transforma_magicamente(s) {
-    function duas_casas(numero) {
-      if (numero <= 9) {
-        numero = "0" + numero;
-      }
-      return numero;
-    }
-    var hora = duas_casas(Math.round(s / 3600));
-    var minuto = duas_casas(Math.round((s % 3600) / 60));
-    var segundo = duas_casas((s % 3600) % 60);
-    var formatado = hora + ":" + minuto + ":" + segundo;
-    return formatado;
   }
 
   stopTimer() {
     this.subscribeTimer.unsubscribe();
   }
 
-  prepareTreinoSemana(finalizar: boolean = false): TreinoSemanaEdit{
+  prepareTreinoSemana(finalizar: boolean = false): TreinoSemanaEdit {
     const _treinoSemana = new TreinoSemanaEdit();
     _treinoSemana.idTreinoUsuario = this.treino.idTreinoUsuario;
     _treinoSemana.executado = this.treino.executado;
@@ -105,6 +91,15 @@ export class TreinoComponent implements OnInit, OnDestroy {
   }
 
   close() {
+    if (this.startTreino) {
+      this.alertService.presentAlertConfirm('Atenção!', 'O treino ainda não terminou. Deseja finaliza-lo?')
+        .then((value) => {
+          if (value == 'yes') {
+            this.finalizarTreino();
+          }
+        })
+      return;
+    }
     this.modalController.dismiss();
   }
 
