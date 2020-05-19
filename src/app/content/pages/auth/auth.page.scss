@@ -9,6 +9,8 @@
     }
 }
 
+
+
 .line {
     align-items: center;
     margin: 1em -1em;
@@ -32,15 +34,19 @@
 .auth-form ion-row {
     height: 100%;
     justify-content: center;
+    align-items: center !important;
+    width: 100%;
 }
 
 .already {
     display: block;
     text-align: center;
     padding-bottom: 10px;
+    color: white;
 }
 
 ion-grid {
     height: 100%;
     justify-content: center;
+    background-color: var(--ion-color-primary);
 }

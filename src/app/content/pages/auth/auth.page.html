@@ -1,23 +1,15 @@
-<ion-header>
-    <ion-toolbar>
-      <ion-title>
-        Treino App
-      </ion-title>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content class="auth-form">
-    <ion-grid>
-      <ion-row>
-        <ion-col align-self-center>
-          <ion-button [routerLink]="['register']" expand="block" color="primary">Criar conta</ion-button>
-  
-          <span class="divider line one-line">ou</span>
-  
-          <span class="already">Já possui conta?</span>
-  
-          <ion-button [routerLink]="['login']" expand="block" color="danger">Entrar</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-content>
+<ion-content   class="auth-form">
+  <ion-grid>
+    <ion-row center>
+      <ion-col align-self-center>
+        <ion-button shape="round" fill="outline" [routerLink]="['register']" expand="block" color="light">Criar conta</ion-button>
+
+        <span class="divider line one-line">ou</span>
+
+        <span class="already">Já possui conta?</span>
+
+        <ion-button shape="round"  [routerLink]="['login']" expand="block" color="light">Entrar</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
