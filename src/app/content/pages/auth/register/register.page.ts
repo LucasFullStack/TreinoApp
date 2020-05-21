@@ -18,14 +18,33 @@ let _postRegister$: Subscription = new Subscription();
 export class RegisterPage implements OnInit, OnDestroy {
   form: FormGroup;
   errorMessage: string = 'Não foi possível  criar a conta. Caso o problema persista entre em contato com o administrador!';
+  validation_messages = {
+     'firstName': [
+        { type: 'required', message: 'Username is required.' },
+        { type: 'maxlength', message: 'Username cannot be more than 25 characters long.' },
+        { type: 'pattern', message: 'Your username must contain only numbers and letters.' },
+      ],
+      'password':[
+        { type: 'required', message: 'Senha é obrigatório' },
+        { type: 'minlength', message: 'Senha deve ter no minimo 4 caratereres.' },
+        { type: 'maxlength', message: 'Senha não pode ter mais que 6 caratereres.' },
+        { type: 'pattern', message: 'Senha não deve conter espaços.' },
+      ]
+    }
 
   constructor(private fb: FormBuilder,
-              private authenticationService: AuthenticationService,
-              private loadingService: LoadingService,
-              private alertService: AlertService) { }
+    private authenticationService: AuthenticationService,
+    private loadingService: LoadingService,
+    private alertService: AlertService) { }
 
   ngOnInit() {
     this.createForm();
+
+    this.form.valueChanges
+           .subscribe((data)=>{
+             console.log(this.form.controls['password'].invalid)
+           //  console.log(this.form.get('password').hasError('minlength'))
+           })
   }
 
   ngOnDestroy() {
@@ -33,14 +52,19 @@ export class RegisterPage implements OnInit, OnDestroy {
   }
 
   createForm() {
-    const _patternEmail: string =  "^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$";
+    const _patternNoSpace: string = "[^' ']+"
+    const _patternEmail: string = "^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$";
     this.form = this.fb.group({
       'firstName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
       'lastName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-      'gender': ['',Validators.compose([Validators.required])],
+      'gender': ['', Validators.compose([Validators.required])],
       'birthDate': ['', Validators.required],
-      'email': ['',  Validators.compose([Validators.required, Validators.pattern(_patternEmail)])],
-      'password': ['',Validators.compose([Validators.required, Validators.minLength(4),Validators.maxLength(6)])],
+      'email': ['', Validators.compose([Validators.required, Validators.pattern(_patternEmail)])],
+      'password': ['', Validators.compose(
+        [Validators.required, 
+         Validators.minLength(4), 
+         Validators.maxLength(6),
+         Validators.pattern(_patternNoSpace)])],
     })
   }
 
@@ -61,14 +85,14 @@ export class RegisterPage implements OnInit, OnDestroy {
       })
     )
       .subscribe(() => {
-        this.presentSuccessAlert('Parabéns, ' + register.firstName + "!",'Sua sua conta foi criada com sucesso!');
+        this.presentSuccessAlert('Parabéns, ' + register.firstName + "!", 'Sua sua conta foi criada com sucesso!');
         this.form.reset();
       }, (error: HttpErrorResponse) => {
-         if(error.status > 0){
-           this.presentErrorAlert('Atenção!', error.error.msg)
-         }else {
-           this.presentErrorAlert('Atenção!',this.errorMessage)
-         }
+        if (error.status > 0) {
+          this.presentErrorAlert('Atenção!', error.error.msg)
+        } else {
+          this.presentErrorAlert('Atenção!', this.errorMessage)
+        }
       })
   }
 
@@ -84,12 +108,12 @@ export class RegisterPage implements OnInit, OnDestroy {
     return _register;
   }
 
-  presentSuccessAlert(header: string, msg: string){
-    this.alertService.presentSuccessAlertDefault(header,msg)
+  presentSuccessAlert(header: string, msg: string) {
+    this.alertService.presentSuccessAlertDefault(header, msg)
   }
 
-  presentErrorAlert(header: string, msg: string){
-    this.alertService.presentErrorAlertDefault(header,msg)
+  presentErrorAlert(header: string, msg: string) {
+    this.alertService.presentErrorAlertDefault(header, msg)
   }
 
 }

@@ -25,3 +25,38 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+.line-input {
+    margin-bottom: 0!important;
+    padding-right: 10px;
+    padding-left: 10px;
+    ion-item {
+        --border-color: transparent!important;
+        --highlight-height: 0;
+        border: 1px solid #dedede;
+        border-radius: 4px;
+        margin-top: 10px;
+        height: 50px;
+        &.item-has-focus {
+            border: 1px solid var(--ion-color-primary);
+        }
+        ion-label {
+            color: #807e7e!important;
+            font-weight: 300;
+            font-size: 1rem!important;
+        }
+    }
+}
+
+.error-message{
+    padding-top: 5px;
+    font-size: 75%;
+    color: var(--ion-color-danger);
+}
+.error-input{
+    border-color:  var(--ion-color-danger) !important;
+}
+
+.error-label{
+    color: var(--ion-color-danger) !important;
+}
+
