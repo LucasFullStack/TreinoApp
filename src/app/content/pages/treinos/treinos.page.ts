@@ -8,6 +8,7 @@ import { TreinosService } from 'src/app/core/services/treinos/treinos.service';
 import { Treinos } from 'src/app/core/models/treinos/treinos';
 import { finalize } from 'rxjs/operators';
 import { UtilService } from 'src/app/core/services/util/util.service';
+import { AuthenticationService } from 'src/app/core/services/auth/authentication.service';
 
 let _getTreinosSemana$ = new Subscription();
 
@@ -23,7 +24,8 @@ export class TreinosPage implements OnInit, OnDestroy {
   constructor(private modalController: ModalController,
               private treinosService: TreinosService,
               private cdr: ChangeDetectorRef,
-              public utilService: UtilService) { }
+              public utilService: UtilService,
+              private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     this.getTreinosSemana();
@@ -96,6 +98,10 @@ export class TreinosPage implements OnInit, OnDestroy {
       componentProps: { treino }
     });
     return await modal.present();
+  }
+
+  logout(){
+    this.authenticationService.logout(true);
   }
 
 }
