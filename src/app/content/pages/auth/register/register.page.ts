@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { LoadingService } from 'src/app/core/services/loading/loading.service';
 import { AlertService } from 'src/app/core/services/alert/alert.service';
 import { AuthenticationService } from 'src/app/core/services/auth/authentication.service';
+import { NavController } from '@ionic/angular';
 
 let _postRegister$: Subscription = new Subscription();
 
@@ -18,14 +19,30 @@ let _postRegister$: Subscription = new Subscription();
 export class RegisterPage implements OnInit, OnDestroy {
   form: FormGroup;
   errorMessage: string = 'Não foi possível  criar a conta. Caso o problema persista entre em contato com o administrador!';
+  maxYear: number = new Date().getFullYear() - 13;
   validation_messages = {
      'firstName': [
-        { type: 'required', message: 'Username is required.' },
-        { type: 'maxlength', message: 'Username cannot be more than 25 characters long.' },
-        { type: 'pattern', message: 'Your username must contain only numbers and letters.' },
+        { type: 'required', message: 'Nome é obrigatório.' },
+        { type: 'pattern', message: 'Nome não é válido.' },
+        { type: 'maxlength', message: 'Nome não pode ter mais que 50 caratereres.' },
+      ],
+      'lastName': [
+        { type: 'required', message: 'Sobrenome é obrigatório.' },
+        { type: 'pattern', message: 'Sobrenome não é válido.' },
+        { type: 'maxlength', message: 'Sobrenome não pode ter mais que 50 caratereres.' },
+      ],
+      'gender': [
+        { type: 'required', message: 'Sexo é obrigatório.' }
+      ],
+      'birthDate': [
+        { type: 'required', message: 'Data de nascimento é obrigatório.' }
+      ],
+      'email': [
+        { type: 'required', message: 'Email é obrigatório.' },
+        { type: 'pattern', message: 'Email é inválido.' },
       ],
       'password':[
-        { type: 'required', message: 'Senha é obrigatório' },
+        { type: 'required', message: 'Senha é obrigatória' },
         { type: 'minlength', message: 'Senha deve ter no minimo 4 caratereres.' },
         { type: 'maxlength', message: 'Senha não pode ter mais que 6 caratereres.' },
         { type: 'pattern', message: 'Senha não deve conter espaços.' },
@@ -35,16 +52,12 @@ export class RegisterPage implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     private authenticationService: AuthenticationService,
     private loadingService: LoadingService,
-    private alertService: AlertService) { }
+    private alertService: AlertService,
+    private navController: NavController) { }
 
   ngOnInit() {
     this.createForm();
-
-    this.form.valueChanges
-           .subscribe((data)=>{
-             console.log(this.form.controls['password'].invalid)
-           //  console.log(this.form.get('password').hasError('minlength'))
-           })
+ 
   }
 
   ngOnDestroy() {
@@ -52,14 +65,27 @@ export class RegisterPage implements OnInit, OnDestroy {
   }
 
   createForm() {
-    const _patternNoSpace: string = "[^' ']+"
+    const _patternName: string = "[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$";
+    const _patternNoSpace: string = "[^' ']+";
     const _patternEmail: string = "^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$";
     this.form = this.fb.group({
-      'firstName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-      'lastName': ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+      'firstName': ['', Validators.compose([
+        Validators.required, 
+        Validators.maxLength(50),
+        Validators.pattern(_patternName),
+        Validators.pattern(_patternNoSpace)
+      ])],
+      'lastName': ['', Validators.compose([
+        Validators.required, 
+        Validators.maxLength(50),
+        Validators.pattern(_patternName),
+        Validators.pattern(_patternNoSpace)])],
       'gender': ['', Validators.compose([Validators.required])],
       'birthDate': ['', Validators.required],
-      'email': ['', Validators.compose([Validators.required, Validators.pattern(_patternEmail)])],
+      'email': ['', Validators.compose([
+        Validators.required, 
+        Validators.pattern(_patternEmail),
+        Validators.pattern(_patternNoSpace)])],
       'password': ['', Validators.compose(
         [Validators.required, 
          Validators.minLength(4), 
@@ -70,6 +96,9 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   onSubmit() {
     if (!this.form.valid) {
+      Object.keys(this.form.controls).forEach(controlName =>
+        this.form.controls[controlName].markAsTouched()
+      );
       return;
     }
 
@@ -85,8 +114,10 @@ export class RegisterPage implements OnInit, OnDestroy {
       })
     )
       .subscribe(() => {
-        this.presentSuccessAlert('Parabéns, ' + register.firstName + "!", 'Sua sua conta foi criada com sucesso!');
-        this.form.reset();
+        this.alertService.presentAlert('Parabéns, ' + register.firstName + "!", 'Sua sua conta foi criada com sucesso!')
+        .then((value) => {
+           this.navController.back();
+        })
       }, (error: HttpErrorResponse) => {
         if (error.status > 0) {
           this.presentErrorAlert('Atenção!', error.error.msg)

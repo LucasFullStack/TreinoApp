@@ -10,52 +10,95 @@
 <ion-content>
   <form [formGroup]="form">
     <ion-list class="line-input">
-      <ion-item  lines="none">
-        <ion-label position="floating"> Nome</ion-label>
-        <ion-input maxlength="50" formControlName="firstName" type="text"></ion-input>
+      <ion-item [ngClass]="{ 'error-input': form.controls['firstName'].invalid && form.get('firstName').touched }"
+        lines="none">
+        <ion-label [ngClass]="{ 'error-label': form.controls['firstName'].invalid && form.get('firstName').touched }"
+          position="floating"> Nome</ion-label>
+        <ion-input formControlName="firstName" type="text"></ion-input>
       </ion-item>
-      <ng-container *ngFor="let validation of validation_messages.username">
-        <div class="error-message" *ngIf="form.get('firstName').hasError(validation.type) && (form.get('firstName').dirty || form.get('firstName').touched)">
+      <ng-container *ngFor="let validation of validation_messages.firstName">
+        <div class="error-message"
+          *ngIf="form.get('firstName').hasError(validation.type) && (form.get('firstName').dirty || form.get('firstName').touched)">
           {{ validation.message }}
         </div>
       </ng-container>
 
-      <ion-item lines="none">
-        <ion-label position="floating">Sobrenome</ion-label>
-        <ion-input maxlength="50" formControlName="lastName" type="text"></ion-input>
+      <ion-item [ngClass]="{ 'error-input': form.controls['lastName'].invalid &&  form.get('lastName').touched}"
+        lines="none">
+        <ion-label [ngClass]="{ 'error-label': form.controls['lastName'].invalid &&  form.get('lastName').touched}"
+          position="floating">Sobrenome</ion-label>
+        <ion-input formControlName="lastName" type="text"></ion-input>
       </ion-item>
-  
-      <ion-item lines="none">
-        <ion-label>Sexo</ion-label>
-        <ion-select  formControlName="gender">
+
+      <ng-container *ngFor="let validation of validation_messages.lastName">
+        <div class="error-message"
+          *ngIf="form.get('lastName').hasError(validation.type) && (form.get('lastName').dirty || form.get('lastName').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+
+      <ion-item lines="none"
+        [ngClass]="{ 'error-input': form.controls['gender'].invalid &&  form.get('gender').touched}">
+        <ion-label [ngClass]="{ 'error-label': form.controls['gender'].invalid &&  form.get('gender').touched}">Sexo
+        </ion-label>
+        <ion-select formControlName="gender">
           <ion-select-option value="f">Feminino</ion-select-option>
           <ion-select-option value="m">Masculino</ion-select-option>
         </ion-select>
       </ion-item>
-  
-      <ion-item lines="none">
-        <ion-label>Data Nascimento</ion-label>
-        <ion-datetime formControlName="birthDate" max="2000" displayFormat="DD/MM/YYYY"></ion-datetime>
-      </ion-item>
-  
-      <ion-item lines="none">
-        <ion-label position="floating">Email</ion-label>
-        <ion-input maxlength="50" formControlName="email" type="text"></ion-input>
-      </ion-item>
-  
-      <ion-item [ngClass]="{ 'error-input': form.controls['password'].invalid}" lines="none">
-        <ion-label [ngClass]="{ 'error-label': form.controls['password'].invalid}" position="floating">Senha</ion-label>
-        <ion-input formControlName="password" type="password"></ion-input>
-      </ion-item>
-      <ng-container *ngFor="let validation of validation_messages.password">
-        <div class="error-message" *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
+
+      <ng-container *ngFor="let validation of validation_messages.gender">
+        <div class="error-message"
+          *ngIf="form.get('gender').hasError(validation.type) && (form.get('gender').dirty || form.get('gender').touched)">
           {{ validation.message }}
         </div>
       </ng-container>
+
+      <ion-item lines="none"
+        [ngClass]="{ 'error-input': form.controls['birthDate'].invalid &&  form.get('birthDate').touched}">
+        <ion-label [ngClass]="{ 'error-label': form.controls['birthDate'].invalid &&  form.get('birthDate').touched}">
+          Data Nascimento</ion-label>
+        <ion-datetime formControlName="birthDate" [max]="maxYear" displayFormat="DD/MM/YYYY"></ion-datetime>
+      </ion-item>
+
+
+      <ng-container *ngFor="let validation of validation_messages.birthDate">
+        <div class="error-message"
+          *ngIf="form.get('birthDate').hasError(validation.type) && (form.get('birthDate').dirty || form.get('birthDate').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+
+      <ion-item lines="none" [ngClass]="{ 'error-input': form.controls['email'].invalid &&  form.get('email').touched}">
+        <ion-label [ngClass]="{ 'error-label': form.controls['email'].invalid &&  form.get('email').touched}"
+          position="floating">Email</ion-label>
+        <ion-input maxlength="50" formControlName="email" type="text"></ion-input>
+      </ion-item>
+
+      <ng-container *ngFor="let validation of validation_messages.email">
+        <div class="error-message"
+          *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+
+      <ion-item [ngClass]="{ 'error-input': form.controls['password'].invalid &&  form.get('password').touched}" lines="none">
+        <ion-label [ngClass]="{ 'error-label': form.controls['password'].invalid &&  form.get('password').touched}" position="floating">Senha</ion-label>
+        <ion-input formControlName="password" type="password"></ion-input>
+      </ion-item>
+
+      <ng-container *ngFor="let validation of validation_messages.password">
+        <div class="error-message"
+          *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+
     </ion-list>
     <ion-row>
       <ion-col>
-        <ion-button [disabled]="form.invalid" (click)="onSubmit()" type="submit" shape="round" color="primary" expand="block">Criar conta</ion-button>
+        <ion-button (click)="onSubmit()" type="submit" shape="round" color="primary"
+          expand="block">Criar conta</ion-button>
       </ion-col>
     </ion-row>
   </form>
