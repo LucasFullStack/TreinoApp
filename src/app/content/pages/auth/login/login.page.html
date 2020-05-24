@@ -1,29 +1,39 @@
-<ion-header>
-	<ion-toolbar>
+<ion-header class="ion-no-border">
+	<ion-toolbar color="var(--ion-color-primary)">
 		<ion-buttons slot="start">
-			<ion-back-button></ion-back-button>
+			<ion-back-button style="color: white;"></ion-back-button>
 		</ion-buttons>
-		<ion-title>Entrar</ion-title>
+		<ion-title style="color: white;">Entrar</ion-title>
 	</ion-toolbar>
 </ion-header>
 
 <ion-content>
-	<form [formGroup]="form">
-		<ion-item lines="full">
-			<ion-label position="floating">Email</ion-label>
-			<ion-input maxlength="50" formControlName="email" type="text" required></ion-input>
-		</ion-item>
-
-		<ion-item lines="full">
-			<ion-label position="floating">Password</ion-label>
-			<ion-input maxlength="6" formControlName="password" type="password" required></ion-input>
-		</ion-item>
-
+	<ion-grid>
 		<ion-row>
-			<ion-col>
-				<ion-button [disabled]="form.invalid" (click)="onSubmit()" type="submit" color="danger" expand="block">Entrar</ion-button>
-				<a [routerLink]="['forgot-password']" class="small-text">Esqueceu a senha?</a>
+			<ion-col align-self-center>
+				<form  [formGroup]="form">
+					<ion-list color="var(--ion-color-primary)" class="line-input-login">
+						<ion-item lines="full" color="var(--ion-color-primary)">
+							<ion-label position="floating">Email</ion-label>
+							<ion-input color="var(--ion-color-primary)" maxlength="50" formControlName="email"
+								type="text" required></ion-input>
+						</ion-item>
+
+						<ion-item lines="full" color="var(--ion-color-primary)">
+							<ion-label position="floating">Senha</ion-label>
+							<ion-input color="var(--ion-color-primary)" maxlength="6" formControlName="password"
+								type="password" required></ion-input>
+						</ion-item>
+					</ion-list>
+					<ion-row>
+						<ion-col>
+							<ion-button shape="round" expand="block" color="light" [disabled]="form.invalid"
+								(click)="onSubmit()" type="submit">Entrar</ion-button>
+							<a [routerLink]="['forgot-password']" class="small-text">Esqueceu a senha?</a>
+						</ion-col>
+					</ion-row>
+				</form>
 			</ion-col>
 		</ion-row>
-	</form>
+	</ion-grid>
 </ion-content>

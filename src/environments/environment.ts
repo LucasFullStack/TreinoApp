@@ -3,8 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  API_URL: 'http://treinoapi.ddns.net:81/',
-  //API_URL: 'https://localhost:44377/',
+  //API_URL: 'http://treinoapi.ddns.net:81/',
+  API_URL: 'http://192.168.0.105:81/',
+//API_URL: 'https://localhost:44377/',
   production: false
 };
 
