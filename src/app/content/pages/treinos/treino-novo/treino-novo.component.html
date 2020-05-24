@@ -15,6 +15,10 @@
 
 <ion-content>
 
+  <ion-refresher slot="fixed" (ionRefresh)="getSemanaDias(true,$event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-list-header>
     <ion-label>Qual o dia deseja iniciar o treino?</ion-label>
   </ion-list-header>

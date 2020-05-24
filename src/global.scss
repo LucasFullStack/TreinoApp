@@ -67,3 +67,8 @@ html, body{
     color: var(--ion-color-danger) !important;
 }
 
+ion-toast.toast {
+    text-align: center;
+    position: fixed;
+
+    }
