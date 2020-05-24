@@ -1,24 +1,21 @@
-
-
-/*ion-icon {
-    font-size: 50px; //Preferred size here
-}*/
-
-.grupos{
-//font-size: 15px;
-}
-
 .pull-right {
     float: right;
   }
 
-  ion-card{
+ion-card{
     box-shadow: none !important;
+    
   }
 
-  span{
+  .treino{
+    min-height: 175px;
+  }
+  
+
+span{
       color: #737373;
   }
+
   ion-chip{
       background-color:#F6D8CE;
       border-radius: 5px;
@@ -29,7 +26,6 @@
       display:block;
       border-radius: 50%;
   }
-
   
   .dot {
     background-color:  var(--ion-color-primary);
@@ -45,4 +41,7 @@
     font-size: 25px;
   }
 
+  ion-list-heade{
+    text-align: center;
+  }
   

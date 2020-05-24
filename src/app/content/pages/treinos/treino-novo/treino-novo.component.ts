@@ -41,9 +41,8 @@ export class TreinoNovoComponent implements OnInit, OnDestroy {
     this.modalController.dismiss();
   }
 
-  novoTreino(semanaDia: SemanaDias) {
-    this.idSemanaDia = semanaDia.idSemanaDia;
-    this.alertService.presentAlertConfirm('Novo treino', 'Confirma o início do treino na ' + semanaDia.semanaDia + '?')
+  novoTreino() {
+    this.alertService.presentAlertConfirm('Novo treino', 'Confirma o início do treino na ' + this.semanaDias.filter((item) => item.idSemanaDia == this.idSemanaDia)[0].semanaDia + '?')
       .then((value) => {
         if (value == 'yes') {
           this.postTreinoSemana();
@@ -58,21 +57,23 @@ export class TreinoNovoComponent implements OnInit, OnDestroy {
     _postTreinoSemana$ = this.treinosService.postTreinoSemana(_treinoSemanaAdd).pipe(
       finalize(() => {
         this.loadingService.dismissLoading();
-        this.modalController.dismiss(true);
+
       })
-    )
-      .subscribe(() => {
-        this.alertService.presentSuccessAlertDefault('Treino liberado!', 'Seu novo treino já está disponivel');
-      }, (error) => {
-        this.alertService.presentSuccessAlertDefault('Atenção!', error.error);
-      })
+    ).subscribe(() => {
+      this.alertService.presentAlert('Treino liberado', 'Seu novo treino já está disponivel.')
+        .then((value) => {
+          this.modalController.dismiss(true);
+        })
+    }, (error) => {
+      this.alertService.presentErrorAlertDefault('Atenção', error.error);
+    })
   }
 
   btnSelected(idSemanaDia: number) {
     if (this.idSemanaDia == idSemanaDia) {
-      return 'primary';
+      return 'solid';
     }
-    return 'light';
+    return 'outline';
   }
 
   ngOnDestroy() {
