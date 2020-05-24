@@ -44,7 +44,7 @@ export class AlertService {
     const _alert = await this.alertController.create({
       header: header,
       message: message,
-      buttons: ['OK']
+      buttons: ['Voltar']
     });
     await _alert.present();
   }

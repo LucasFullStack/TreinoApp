@@ -54,9 +54,9 @@ export class LoginPage implements OnInit, OnDestroy {
       }, (error: HttpErrorResponse) => {
         console.log(error)
         if(error.status > 0){
-          this.presentErrorAlert('Atenção!', error.error)
+          this.presentErrorAlert('Falha no login', error.error)
         }else {
-          this.presentErrorAlert('Atenção!',this.errorMessage)
+          this.presentErrorAlert('Falha no login',this.errorMessage)
         }
         
       })
