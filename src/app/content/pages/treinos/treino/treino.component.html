@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
     <ion-title style="padding-left: 0px;"> {{ treino.divisao }}</ion-title>
     <ion-buttons (click)="close()" slot="start" class="title-toolbar">
       <ion-button>
@@ -28,9 +28,29 @@
     <ion-label>Intervalo de {{ treino.intervalo }}</ion-label>
   </ion-list-header>
 </ion-content>
-<ion-footer>
-  <ion-button *ngIf="!treino.treinando && !treino.dataExecucao" (click)="iniciarTreino()" expand="full">Iniciar treino
-  </ion-button>
-  <ion-button *ngIf="treino.treinando && !treino.dataExecucao" color="danger" (click)="finalizarTreino()" expand="full">
-    Finalizar treino</ion-button>
+<ion-footer class="ion-no-border">
+  <ion-buttons>
+    <ion-button 
+    *ngIf="treino.treinando && !treino.dataExecucao"
+    color="primary"
+    class="btn"  
+    (click)="pausarTreino()"  
+    expand="block" 
+    fill="outline"><ion-icon style="padding-right: 0px; font-size: 20px;" name="pause"></ion-icon> Pausar </ion-button>
+    <ion-button 
+    color="primary"
+    class="btn" 
+    *ngIf="!treino.treinando && !treino.dataExecucao" 
+    (click)="iniciarTreino()" 
+    expand="block" 
+    fill="outline"> <ion-icon name="play" style="padding-right: 3px; font-size: 20px;"></ion-icon> {{getName()}} treino
+    </ion-button>
+    <ion-button 
+    *ngIf="treino.treinando && !treino.dataExecucao"
+    color="primary"
+    (click)="finalizarTreino()"
+    class="btn" 
+    slot="end" 
+    expand="block" fill="solid"> <ion-icon style="padding-right: 5px; font-size: 17px;" name="square"></ion-icon> Finalizar </ion-button>
+  </ion-buttons>
 </ion-footer>

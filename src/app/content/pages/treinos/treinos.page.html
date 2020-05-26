@@ -10,7 +10,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngIf="enbaleTreinoNovo(this.treinosSemana?.dataFim)" (click)="openNovoTreino()">
+  <ion-card *ngIf="enableTreinoNovo(this.treinosSemana?.dataFim)" (click)="openNovoTreino()">
     <ion-item lines="none">
       <ion-avatar slot="start">
         <span class="dot">
@@ -50,7 +50,7 @@
         </ion-item>
         <ion-item lines="none">
           <ion-label style="color: #737373">{{ treino?.qtdExercicios}} exercicios
-            <p *ngIf="treino.tempoTreino > 0" style="padding-top: 10px;"> <span> <i>
+            <p *ngIf="treino.tempoTreino > 0 && treino.dataExecucao" style="padding-top: 10px;"> <span> <i>
               Tempo médio gasto:
               {{ getTempMedioTreino( treino.tempoTreino ) }}
             </i>  </span></p>

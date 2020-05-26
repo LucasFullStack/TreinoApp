@@ -46,6 +46,24 @@ export class TreinoComponent implements OnInit, OnDestroy {
     this.startTimer();
   }
 
+  pausarTreino(){
+    this.startTreino = !this.startTreino;
+    this.treino.treinando = false;
+    this.stopTimer();
+    this.tempoTreino = this.treino.tempoTreino;
+    const _treinoSemana = this.prepareTreinoSemana();
+    this.treinosService.putTreinoSemana(_treinoSemana).toPromise();
+    this.treinosService.updateTreinoSemana(this.treino)
+  }
+
+  getName(): string{
+    if(this.treino.tempoTreino > 0 && this.treino.treinando == false){
+      return 'Continuar'
+    }
+
+    return 'Iniciar'
+  }
+
   finalizarTreino() {
     this.startTreino = !this.startTreino;
     this.loadingService.presentLoading('Salvando...');

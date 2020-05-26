@@ -20,7 +20,6 @@ let _getTreinosSemana$ = new Subscription();
 })
 export class TreinosPage implements OnInit, OnDestroy {
   treinosSemana: TreinosSemana = new TreinosSemana();
-  date: Date = new Date();
 
   constructor(private modalController: ModalController,
     private treinosService: TreinosService,
@@ -37,9 +36,9 @@ export class TreinosPage implements OnInit, OnDestroy {
     _getTreinosSemana$.unsubscribe();
   }
 
-  enbaleTreinoNovo(dataFim: string) {
+  enableTreinoNovo(dataFim: string) {
     if (dataFim != undefined && dataFim != null) {
-      return this.date.toISOString() > dataFim;
+      return this.utilService.getDateTimeNow() > dataFim;
     }
     return true;
   }
