@@ -55,12 +55,14 @@
               {{ getTempMedioTreino( treino.tempoTreino ) }}
             </i>  </span></p>
           </ion-label>
-
-          
           <span class="dot">
-            <ion-icon name="play"></ion-icon>
-          </span>
 
+            <ion-icon *ngIf="!treino.dataExecucao && treino.tempoTreino > 0 else iconPlay" name="pause"></ion-icon>
+            <ng-template #iconPlay>
+              <ion-icon  name="play"></ion-icon>
+          </ng-template>
+     
+          </span>
         </ion-item>
       </ion-list>
     </ion-card>

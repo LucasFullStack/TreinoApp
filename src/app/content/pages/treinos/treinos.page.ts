@@ -43,6 +43,16 @@ export class TreinosPage implements OnInit, OnDestroy {
     return true;
   }
 
+  getIconName(treino: Treinos): string{
+    if(treino.dataExecucao){
+      return 'square';
+    }
+    if(!treino.dataExecucao && treino.tempoTreino > 0){
+      return 'pause';
+    }
+    return 'play';
+  }
+
   getTempMedioTreino(tempoTreino: number): string {
     let timer: string = this.utilService.transforma_segundosEmHoras(tempoTreino);
     let hh: string = timer.split(":")[0];
