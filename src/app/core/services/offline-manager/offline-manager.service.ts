@@ -56,7 +56,7 @@ export class OfflineManagerService {
                     cssClass: 'toast'
                   });
                   setTimeout(() => {
-                    toast.then(toast => toast.present());
+                    //toast.then(toast => toast.present());
                   }, 3000)
                 }
                 this.syncing = false;
@@ -109,6 +109,7 @@ export class OfflineManagerService {
                 })
               }),
               catchError(async (err: HttpErrorResponse) => {
+                console.log(err)
                 if(err.status == 400 || err.status == 404 || err.status == 405 || err.status == 406 || err.status == 500){
                   await this.storage.get(STORAGE_REQ_KEY).then(async (data) => {
                     let storedObj = await JSON.parse(data);

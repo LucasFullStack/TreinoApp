@@ -60,25 +60,28 @@ export class TreinoComponent implements OnInit, OnDestroy {
     if(this.treino.tempoTreino > 0 && this.treino.treinando == false){
       return 'Continuar'
     }
-
     return 'Iniciar'
   }
 
   finalizarTreino() {
-    this.startTreino = !this.startTreino;
-    this.loadingService.presentLoading('Salvando...');
-    this.treino.treinando = false;
-    this.stopTimer();
-    this.treino.executado = true;
-    this.treino.dataExecucao = this.utilService.getDateTimeNow();
-    const _treinoSemana = this.prepareTreinoSemana(true);
-    this.putTreinoSemana(_treinoSemana);
+    this.alertService.presentAlertConfirm('Atenção', 'Deseja finalizar o treino?')
+    .then((value) => {
+      if (value == 'yes') {
+        this.startTreino = !this.startTreino;
+        this.treino.treinando = false;
+        this.stopTimer();
+        this.treino.executado = true;
+        this.treino.dataExecucao = this.utilService.getDateTimeNow();
+        const _treinoSemana = this.prepareTreinoSemana(true);
+        this.putTreinoSemana(_treinoSemana);
+      }
+    })
   }
 
   putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit) {
     _putTreinoSemana$ = this.treinosService.putTreinoSemana(treinoSemanaEdit).pipe(
       finalize(() => {
-        this.loadingService.dismissLoading();
+
       })
     ).subscribe(() => this.modalController.dismiss(true),
       (error) => this.alertService.presentErrorAlertDefault('Atenção!', error.error))

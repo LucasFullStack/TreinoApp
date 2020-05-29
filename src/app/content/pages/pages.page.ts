@@ -7,6 +7,7 @@ import { MenuService } from 'src/app/core/services/menu/menu.service';
 import { UsuarioDisplay } from 'src/app/core/models/usuarios/usuario-display';
 import { Subscription } from 'rxjs';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { OfflineManagerService } from 'src/app/core/services/offline-manager/offline-manager.service';
 
 let _checkRouteEvents$: Subscription = new Subscription();
 
@@ -26,7 +27,8 @@ export class PagesPage implements OnInit, OnDestroy {
     public navCtrl: NavController,
     private menuService: MenuService,
     private platform: Platform,
-    private appVersion: AppVersion) { }
+    private appVersion: AppVersion,
+    private offlineManagerService: OfflineManagerService) { }
 
   ngOnInit() {
     this.checkRouteEvents();

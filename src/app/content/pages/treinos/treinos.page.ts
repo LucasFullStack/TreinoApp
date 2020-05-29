@@ -10,6 +10,7 @@ import { finalize } from 'rxjs/operators';
 import { UtilService } from 'src/app/core/services/util/util.service';
 import { AuthenticationService } from 'src/app/core/services/auth/authentication.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { OfflineManagerService } from 'src/app/core/services/offline-manager/offline-manager.service';
 
 let _getTreinosSemana$ = new Subscription();
 
@@ -26,7 +27,8 @@ export class TreinosPage implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     public utilService: UtilService,
     private authenticationService: AuthenticationService,
-    private toastService: ToastService) { }
+    private toastService: ToastService,
+    private offlineManagerService: OfflineManagerService) { }
 
   ngOnInit() {
     this.getTreinosSemana();
@@ -71,23 +73,28 @@ export class TreinosPage implements OnInit, OnDestroy {
 
 
   getTreinosSemana(forceRefresh: boolean = false, event?: any) {
-    _getTreinosSemana$ = this.treinosService.getTreinosSemana(forceRefresh).pipe(
-      finalize(() => {
-        if (event) {
-          event.target.complete();
+    this.offlineManagerService.checkForEvents()
+    .toPromise()
+    .finally(()=>{
+      _getTreinosSemana$ = this.treinosService.getTreinosSemana(forceRefresh).pipe(
+        finalize(() => {
+          if (event) {
+            event.target.complete();
+          }
+          this.cdr.detectChanges();
+        })
+      ).subscribe((result) => {
+        if (result) {
+          this.treinosSemana = result.dados[0];
         }
-        this.cdr.detectChanges();
+        if (!forceRefresh) {
+          this.getTreinosSemana(true)
+        }
+      }, (err) => {
+        this.toastService.presentToast('Não foi possível atualizar :(');
       })
-    ).subscribe((result) => {
-      if (result) {
-        this.treinosSemana = result.dados[0];
-      }
-      if (!forceRefresh) {
-        this.getTreinosSemana(true)
-      }
-    }, (err) => {
-      this.toastService.presentToast('Não foi possível atualizar :(');
     })
+        
   }
 
   async openNovoTreino() {
@@ -109,6 +116,12 @@ export class TreinosPage implements OnInit, OnDestroy {
     const modal = await this.modalController.create({
       component: TreinoComponent,
       componentProps: { treino }
+    });
+    modal.onDidDismiss()
+    .then((result) => {
+      if (result.data) {
+        this.getTreinosSemana(true)
+      }
     });
     return await modal.present();
   }

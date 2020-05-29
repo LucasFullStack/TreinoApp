@@ -7,8 +7,9 @@
       </ion-button>
     </ion-buttons>
     <ion-title slot="end">
-      <ion-label>
-        <ion-icon name="timer-outline"></ion-icon> {{ utilService.transforma_segundosEmHoras( treino.tempoTreino ) }}
+      <ion-icon style="margin-bottom: 2px;" class="cronometro" name="timer-outline"></ion-icon>
+      <ion-label class="cronometro" style="padding-left: 5px;">
+     {{ utilService.transforma_segundosEmHoras( treino.tempoTreino ) }}
       </ion-label>
     </ion-title>
   </ion-toolbar>
@@ -36,6 +37,7 @@
     class="btn"  
     (click)="pausarTreino()"  
     expand="block" 
+    [disabled]="this.treino.tempoTreino == 0"
     fill="outline"><ion-icon style="padding-right: 0px; font-size: 20px;" name="pause"></ion-icon> Pausar </ion-button>
     <ion-button 
     color="primary"
@@ -43,13 +45,14 @@
     *ngIf="!treino.treinando && !treino.dataExecucao" 
     (click)="iniciarTreino()" 
     expand="block" 
-    fill="outline"> <ion-icon name="play" style="padding-right: 3px; font-size: 20px;"></ion-icon> {{getName()}} treino
+    fill="solid"> <ion-icon name="play" style="padding-right: 3px; font-size: 20px;"></ion-icon> {{getName()}} treino
     </ion-button>
     <ion-button 
     *ngIf="treino.treinando && !treino.dataExecucao"
     color="primary"
     (click)="finalizarTreino()"
     class="btn" 
+    [disabled]="this.treino.tempoTreino == 0"
     slot="end" 
     expand="block" fill="solid"> <ion-icon style="padding-right: 5px; font-size: 17px;" name="square"></ion-icon> Finalizar </ion-button>
   </ion-buttons>

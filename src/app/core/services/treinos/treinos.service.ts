@@ -30,7 +30,11 @@ export class TreinosService {
     } else {
       return this.http.get<Result>(key).pipe(
         concatMap(res => this.treinosStorage.setLocalData(key, res)),
-        map(res => res)
+        map(res => res),
+        catchError(err => {
+          console.log(err)
+          return throwError(err);
+        })
       );
     }
   }
@@ -63,11 +67,11 @@ export class TreinosService {
     );
   }
 
-  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit): Observable<any> {
+  putTreinoSemana(treinoSemanaEdit: TreinoSemanaEdit, forceRefresh: boolean = false): Observable<any> {
 
     const API_URL = this.treinosStorage.getAPI_URL() + '/Treino/Semana';
     
-    if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
+    if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline || !forceRefresh) {
       return forkJoin([
         from(this.offlineManager.storeRequest(API_URL, 'PUT', treinoSemanaEdit))
       ])
