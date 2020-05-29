@@ -8,6 +8,7 @@ import { TokenStorageService } from './token-storage.service';
 import { AccessData } from '../../models/auth/access-data';
 import { Login } from '../../models/auth/login';
 import { AuthService } from 'ngx-auth';
+import { AlertService } from '../alert/alert.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,7 +17,8 @@ export class AuthenticationService implements AuthService {
 	private API_URL: string = environment.API_URL + "api/auth";
 
 	constructor(private http: HttpClient,
-		private tokenStorage: TokenStorageService) { }
+		private tokenStorage: TokenStorageService,
+		private alertService: AlertService) { }
 
 
 	/**
@@ -114,8 +116,13 @@ export class AuthenticationService implements AuthService {
 	logout(refresh?: boolean): void {
 		this.tokenStorage.clear();
 		if (refresh) {
-			location.reload(true);
+			this.alertService.presentAlert('Sessão expirada', 'Faça o login novamente!')
+				.then(() => {
+				  location.reload(true);
+				})
+			return;
 		}
+		location.reload(true);
 	}
 
 	private saveAccessData(accessData: AccessData) {
